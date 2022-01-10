@@ -1,0 +1,26 @@
+\documentclass[11pt]{paper}
+
+\ifx\pdftexversion\undefined
+    \usepackage[dvips]{graphicx}
+\else
+    \usepackage[pdftex]{graphicx}
+    \usepackage{epstopdf}
+    \epstopdfsetup{suffix=}
+\fi
+
+\begin{document}
+This is my document.
+
+In Figure \ref{fig:example}, there is an image.
+
+% This is a comment.
+
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Figures/name_of_figure.eps}
+\caption{Caption Goes Here}
+\label{fig:example}
+\end{figure}
+
+\end{document}
