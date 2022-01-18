@@ -65,7 +65,7 @@ This page also refers to Rosen's hedonic pricing models as an extension.
 
 
 Incidentally, I found an article that claims to produce 
-["a formal refutation of  Lancaster's theory"[(http://bowbrick.org.uk/Publications/Refuting%20Lancaster's%20Characteristics%20Theory.pdf) 
+["a formal refutation of  Lancaster's theory"](http://bowbrick.org.uk/Publications/Refuting%20Lancaster's%20Characteristics%20Theory.pdf) 
 of pricing based on characteristics. 
 However, I feel that the author misses the point...of both the theory itself
 and of economics in general. 
