@@ -26,13 +26,13 @@ for an online book called [Introduction to Economic Analysis](https://saylordoto
 
 
 A short YouTube video describes the situation nicely:
-(A Market for Lemons: George Akerlof, Information Asymmetry, Imperfect Information & Market Failures)[https://www.youtube.com/watch?v=tyzf3T2LASs]
+[A Market for Lemons: George Akerlof, Information Asymmetry, Imperfect Information & Market Failures[(https://www.youtube.com/watch?v=tyzf3T2LASs)
 
 
 
 ## Hedonic Pricing Models
 
-The [https://Corporate Finance Institute](https://corporatefinanceinstitute.com) 
+The [Corporate Finance Institute](https://corporatefinanceinstitute.com) 
 has a summary, including some limitations of the modeling approach:
 [Hedonic Pricing](https://corporatefinanceinstitute.com/resources/knowledge/valuation/hedonic-pricing/).
 Their motivation for studying these models is for the valuation of securities. 
@@ -45,7 +45,7 @@ In another application,
 [Ecosystem Valuation](ecosystemvaluation.org/)
 shows a case study of an empirical project to measure the value of
 environmental amenities near homes:
-[Ecosystem Valuation:Hedonic Pricing Method](http://www.ecosystemvaluation.org/hedonic_pricing.htm). 
+[Ecosystem Valuation: Hedonic Pricing Method](http://www.ecosystemvaluation.org/hedonic_pricing.htm). 
 
 
 
@@ -65,7 +65,7 @@ This page also refers to Rosen's hedonic pricing models as an extension.
 
 
 Incidentally, I found an article that claims to produce 
-("a formal refutation of  Lancaster's theory")[http://bowbrick.org.uk/Publications/Refuting%20Lancaster's%20Characteristics%20Theory.pdf] 
+["a formal refutation of  Lancaster's theory"[(http://bowbrick.org.uk/Publications/Refuting%20Lancaster's%20Characteristics%20Theory.pdf) 
 of pricing based on characteristics. 
 However, I feel that the author misses the point...of both the theory itself
 and of economics in general. 
