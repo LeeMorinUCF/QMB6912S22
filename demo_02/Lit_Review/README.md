@@ -70,6 +70,6 @@ of pricing based on characteristics.
 However, I feel that the author misses the point...of both the theory itself
 and of economics in general. 
 It is worth talking about for context
-when it comes to using the scientific method in social sciences. 
+when it comes to using the scientific method in the social sciences. 
 
 
