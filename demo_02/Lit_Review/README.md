@@ -26,7 +26,7 @@ for an online book called [Introduction to Economic Analysis](https://saylordoto
 
 
 A short YouTube video describes the situation nicely:
-[A Market for Lemons: George Akerlof, Information Asymmetry, Imperfect Information & Market Failures[(https://www.youtube.com/watch?v=tyzf3T2LASs)
+[A Market for Lemons: George Akerlof, Information Asymmetry, Imperfect Information & Market Failures](https://www.youtube.com/watch?v=tyzf3T2LASs)
 
 
 
