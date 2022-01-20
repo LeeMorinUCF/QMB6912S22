@@ -50,7 +50,7 @@ This is the introduction.
 
 \section{Middle} \label{sec:middle}
 
-This is the introduction. 
+This is the middle. 
 
 \section{Conclusion} \label{sec:conc}
 
