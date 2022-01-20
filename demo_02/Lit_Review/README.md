@@ -37,7 +37,7 @@ has a summary, including some limitations of the modeling approach:
 [Hedonic Pricing](https://corporatefinanceinstitute.com/resources/knowledge/valuation/hedonic-pricing/).
 Their motivation for studying these models is for the valuation of securities. 
 
-[Investopedia] has a similar review 
+[Investopedia](https://www.investopedia.com) has a similar review 
 [here](https://www.investopedia.com/terms/h/hedonicpricing.asp), 
 which cites Sherwin Rosen's article as the original reference.
 
