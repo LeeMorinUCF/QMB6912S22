@@ -36,7 +36,7 @@ Min. Price    "129.0"  "331.6"  "600.0"
 Mean Price    " 34.99" "280.22" "839.00"
 Max. Price    " 200.0" " 484.9" "1095.0"
 % latex table generated in R 4.0.5 by xtable 1.8-4 package
-% Wed Jan 26 11:48:46 2022
+% Wed Jan 26 11:59:39 2022
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlll}
@@ -163,7 +163,7 @@ Tibor                 4     0     0   4        3      1    0        4
 Waterworks-Lamson    32     0     8  24        0     32    8       24
 Totals              248    27    86 135       94    154   31      217
 % latex table generated in R 4.0.5 by xtable 1.8-4 package
-% Wed Jan 26 11:48:46 2022
+% Wed Jan 26 11:59:39 2022
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrr}
@@ -196,7 +196,7 @@ Totals              248    27    86 135       94    154   31      217
 \end{table}
 [1] "Reel Design by Brand of Fly Reel"
 % latex table generated in R 4.0.5 by xtable 1.8-4 package
-% Wed Jan 26 11:48:46 2022
+% Wed Jan 26 11:59:39 2022
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrr}
