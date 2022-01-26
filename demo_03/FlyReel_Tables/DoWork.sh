@@ -35,7 +35,7 @@ echo ""
 echo "Analyzing the data in R..."
 echo ""
 
-Rscript Code/FlyReel_Tables.R > FlyReel_Tables.out
+Rscript Code/FlyReel_Tables.R > Code/FlyReel_Tables.out
 
 echo "#-------------------------------------------------"
 echo ""

@@ -32,9 +32,9 @@
 # Clear workspace.
 rm(list=ls(all=TRUE))
 
-# Set working directory.
-wd_path <- '~/GitHub/QMB6912S22/demo_03/FlyReel_Tables'
-setwd(wd_path)
+# Set working directory, if running interactively.
+# wd_path <- '~/GitHub/QMB6912S22/demo_03/FlyReel_Tables'
+# setwd(wd_path)
 
 
 # Set data directory.
@@ -51,6 +51,7 @@ tab_dir <- 'Tables'
 # Load libraries
 ##################################################
 
+# install.packages('xtable')
 library(xtable)
 
 
@@ -68,11 +69,16 @@ flyreels <- read.csv(file = in_file_name, header = FALSE,
                      col.names = fly_col_names)
 
 # Initial inspection.
-summary(flyreels)
+print("Summary of FlyReels.csv dataset:")
+print(summary(flyreels))
 
 #--------------------------------------------------
 # Summarize numeric variables.
 #--------------------------------------------------
+
+print('Summarizing Numeric Variables')
+
+print('Summary by Country of Manufacture:')
 
 # Summarize numeric variables by country of manufacture.
 country_sum <- data.frame(Country = unique(flyreels$Country))
@@ -88,7 +94,7 @@ for (var_name in colnames(flyreels)[lapply(flyreels, class) == 'numeric']) {
 # t(X) denotes the transpose of X.
 out_tab <- t(country_sum[, 2:ncol(country_sum)])
 colnames(out_tab) <- country_sum[, 1]
-
+print(out_tab)
 
 # Output to TeX file.
 out_xtable <- xtable(out_tab[, ],
@@ -102,25 +108,14 @@ cat(print(out_xtable), file = tab_file_name, append = FALSE)
 
 
 
-# # Summarize numeric variables by brand of fly reel.
-# country_sum <- data.frame(Brand = unique(flyreels$Brand))
-# for (var_name in colnames(flyreels)[lapply(flyreels, class) == 'numeric']) {
-#
-#   col_names <- sprintf('%s %s', c('Min.', 'Mean', 'Max.'), var_name)
-#   country_sum[, col_names] <- tapply(flyreels$Price, flyreels$Brand,
-#                                      function(x) format(summary(x), scientific = FALSE)[c(1,4,6)])
-#
-# }
-#
-# out_tab <- t(country_sum[, 2:ncol(country_sum)])
-# colnames(out_tab) <- country_sum[, 1]
-
-
 
 
 #--------------------------------------------------
 # Summarize categorical variables.
 #--------------------------------------------------
+
+print('Summarizing Categorical Variables')
+
 
 # Inspect visually before creating tables.
 table(flyreels[, 'Brand'], useNA = 'ifany')
@@ -132,6 +127,10 @@ table(flyreels[, 'Machined'], useNA = 'ifany')
 table(flyreels[, 'Brand'], flyreels[, 'Sealed'], useNA = 'ifany')
 table(flyreels[, 'Brand'], flyreels[, 'Country'], useNA = 'ifany')
 table(flyreels[, 'Brand'], flyreels[, 'Machined'], useNA = 'ifany')
+
+
+print('Country of Manufacture by Brand of Fly Reel')
+
 
 # Assemble these into a table for output.
 out_tab <- cbind(table(flyreels[, 'Brand'], useNA = 'ifany'),
@@ -145,6 +144,7 @@ colnames(out_tab) <- c("Total", "China", "Korea", "USA",
                        "Unsealed", "Sealed", "Cast", "Machined")
 out_tab <- rbind(out_tab, colSums(out_tab))
 rownames(out_tab)[length(rownames(out_tab))] <- "Totals"
+print(out_tab)
 
 
 # Output selected columns to TeX file.
@@ -156,6 +156,9 @@ out_xtable <- xtable(out_tab[, c(2, 3, 4, 1)],
 tab_file_name <- sprintf('country_by_brand.tex')
 tab_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
 cat(print(out_xtable), file = tab_file_name, append = FALSE)
+
+
+print('Reel Design by Brand of Fly Reel')
 
 
 # Output another set of columns to another TeX file.
