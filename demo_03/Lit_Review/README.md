@@ -28,7 +28,7 @@ a sample that has been selected as a result of characteristics of the observatio
 See the review here:
 [Selection Bias](https://en.wikipedia.org/wiki/Selection_bias). 
 
-This brief review is meant to guide a discussion of the relevant terminology relating to sample selection and method for dealing with it. 
+This brief review is meant to guide a discussion of the relevant terminology relating to sample selection and methods for dealing with it. 
 
 
 
