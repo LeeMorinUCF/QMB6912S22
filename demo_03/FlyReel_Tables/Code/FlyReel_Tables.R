@@ -85,7 +85,9 @@ country_sum <- data.frame(Country = unique(flyreels$Country))
 for (var_name in colnames(flyreels)[lapply(flyreels, class) == 'numeric']) {
 
   col_names <- sprintf('%s %s', c('Min.', 'Mean', 'Max.'), var_name)
-  country_sum[, col_names] <- tapply(flyreels$Price, flyreels$Country,
+  # country_sum[, col_names] <- tapply(flyreels$Price, flyreels$Country,
+  #                                    function(x) format(summary(x), scientific = FALSE)[c(1,4,6)])
+  country_sum[, col_names] <- tapply(flyreels[, var_name], flyreels$Country,
                                      function(x) format(summary(x), scientific = FALSE)[c(1,4,6)])
 
 }
