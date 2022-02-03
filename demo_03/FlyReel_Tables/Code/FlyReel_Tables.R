@@ -16,6 +16,8 @@
 # Sample code for the problem sets in the course QMB 6912,
 # Capstone Project in Business Analytics, for the PMSM-BA
 # program.
+# This script summarizes the data
+# by creating tables for rendering in LaTeX.
 #
 # Dependencies:
 #   xtable for creating code for LaTeX tables
@@ -56,7 +58,7 @@ library(xtable)
 
 
 ##################################################
-# Problem Set 3: Summarize Covariates
+# Load Data
 ##################################################
 
 # Set parameters for flyreel dataset.
@@ -72,13 +74,15 @@ flyreels <- read.csv(file = in_file_name, header = FALSE,
 print("Summary of FlyReels.csv dataset:")
 print(summary(flyreels))
 
-#--------------------------------------------------
+##################################################
 # Summarize numeric variables.
-#--------------------------------------------------
+##################################################
 
+#--------------------------------------------------
 print('Summarizing Numeric Variables')
 
 print('Summary by Country of Manufacture:')
+#--------------------------------------------------
 
 # Summarize numeric variables by country of manufacture.
 country_sum <- data.frame(Country = unique(flyreels$Country))
@@ -98,7 +102,10 @@ out_tab <- t(country_sum[, 2:ncol(country_sum)])
 colnames(out_tab) <- country_sum[, 1]
 print(out_tab)
 
+#--------------------------------------------------
 # Output to TeX file.
+#--------------------------------------------------
+
 out_xtable <- xtable(out_tab[, ],
                      digits = 0, label = 'tab:summ_by_country',
                      # caption = 'Goodness of Fit for Fixed vs. Monthly Transition Matrices (1-step-ahead forecasts)',
@@ -112,11 +119,13 @@ cat(print(out_xtable), file = tab_file_name, append = FALSE)
 
 
 
-#--------------------------------------------------
+##################################################
 # Summarize categorical variables.
-#--------------------------------------------------
+##################################################
 
+#--------------------------------------------------
 print('Summarizing Categorical Variables')
+#--------------------------------------------------
 
 
 # Inspect visually before creating tables.
@@ -131,7 +140,9 @@ table(flyreels[, 'Brand'], flyreels[, 'Country'], useNA = 'ifany')
 table(flyreels[, 'Brand'], flyreels[, 'Machined'], useNA = 'ifany')
 
 
+#--------------------------------------------------
 print('Country of Manufacture by Brand of Fly Reel')
+#--------------------------------------------------
 
 
 # Assemble these into a table for output.
@@ -149,7 +160,10 @@ rownames(out_tab)[length(rownames(out_tab))] <- "Totals"
 print(out_tab)
 
 
+#--------------------------------------------------
 # Output selected columns to TeX file.
+#--------------------------------------------------
+
 out_xtable <- xtable(out_tab[, c(2, 3, 4, 1)],
                      digits = 0, label = 'tab:country_by_brand',
                      # caption = 'Goodness of Fit for Fixed vs. Monthly Transition Matrices (1-step-ahead forecasts)',
@@ -160,7 +174,9 @@ tab_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
 cat(print(out_xtable), file = tab_file_name, append = FALSE)
 
 
+#--------------------------------------------------
 print('Reel Design by Brand of Fly Reel')
+#--------------------------------------------------
 
 
 # Output another set of columns to another TeX file.
