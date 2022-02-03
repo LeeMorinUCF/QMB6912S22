@@ -35,7 +35,7 @@ echo ""
 echo "Analyzing the data in R..."
 echo ""
 
-Rscript Code/FlyReel_Price_Density.R > Code/FlyReel_Price_Density.out
+Rscript Code/Tractor_Price_Density.R > Code/Tractor_Price_Density.out
 
 echo "#-------------------------------------------------"
 echo ""
@@ -57,10 +57,10 @@ echo ""
 cd paper
 
 # We need options for extra permission in the VirtualBox machine.
-pdflatex -shell-escape FlyReel_Price_Density.tex
+pdflatex -shell-escape Tractor_Price_Density.tex
 
 # Run the command twice to obtain references in document.
-pdflatex -shell-escape FlyReel_Price_Density.tex
+pdflatex -shell-escape Tractor_Price_Density.tex
 
 echo ""
 

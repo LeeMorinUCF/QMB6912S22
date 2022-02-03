@@ -1,4 +1,5 @@
 # Nonparametrics
+
 Nonparametric methods are used to fit statistical models 
 with arbitrary forms of nonlinearity.
 We will discuss two forms: kernel smoothing and tree methods. 

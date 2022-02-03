@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.3) (preloaded format=pdflatex 2021.5.23)  3 FEB 2022 15:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.3) (preloaded format=pdflatex 2021.5.23)  3 FEB 2022 16:12
 entering extended mode
-**./FlyReel_Figures.tex
-(FlyReel_Figures.tex
+**./FlyReel_Price_Density.tex
+(FlyReel_Price_Density.tex
 LaTeX2e <2020-10-01> patch level 4
 L3 programming layer <2021-05-11>
 (C:\Users\le279259\AppData\Local\Programs\MiKTeX\tex/latex/base\book.cls
@@ -186,8 +186,8 @@ pdftex.def
 File: l3backend-pdftex.def 2021-05-07 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count266
 \l__pdf_internal_box=\box49
-) (FlyReel_Figures.aux)
-\openout1 = `FlyReel_Figures.aux'.
+) (FlyReel_Price_Density.aux)
+\openout1 = `FlyReel_Price_Density.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
 LaTeX Font Info:    ... okay on input line 16.
@@ -241,20 +241,21 @@ File: ../Figures/density_prices.pdf Graphic file (type pdf)
 <use ../Figures/density_prices.pdf>
 Package pdftex.def Info: ../Figures/density_prices.pdf  used on input line 71.
 (pdftex.def)             Requested size: 252.94437pt x 252.94437pt.
- [3 <../Figures/density_prices.pdf>] (FlyReel_Figures.aux) ) 
+ [3 <../Figures/density_prices.pdf>]
+(FlyReel_Price_Density.aux) ) 
 Here is how much of TeX's memory you used:
  2913 strings out of 479163
- 43148 string characters out of 2852567
- 327478 words of memory out of 3000000
+ 43220 string characters out of 2852567
+ 327490 words of memory out of 3000000
  20509 multiletter control sequences out of 15000+600000
  407237 words of font info for 35 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,6n,62p,230b,226s stack positions out of 5000i,500n,10000p,200000b,80000s
-{C:/Users/le279259/
-AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}<C:/Users/le279259/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/urw/palatino/uplb8a.pfb><C:/Users/le279
-259/AppData/Local/Programs/MiKTeX/fonts/type1/urw/palatino/uplr8a.pfb>
-Output written on FlyReel_Figures.pdf (3 pages, 83579 bytes).
+ 55i,6n,62p,236b,226s stack positions out of 5000i,500n,10000p,200000b,80000s
+{C:/Users/le279259/AppData/Local/Programs/MiKTeX/f
+onts/enc/dvips/base/8r.enc}<C:/Users/le279259/AppData/Local/Programs/MiKTeX/fon
+ts/type1/urw/palatino/uplb8a.pfb><C:/Users/le279259/AppData/Local/Programs/MiKT
+eX/fonts/type1/urw/palatino/uplr8a.pfb>
+Output written on FlyReel_Price_Density.pdf (3 pages, 83637 bytes).
 PDF statistics:
  55 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

@@ -20,7 +20,7 @@
 # by plotting histograms and cdfs.
 #
 # Dependencies:
-#   libraries to be added
+#   None
 #
 #
 ##################################################
@@ -35,7 +35,7 @@
 rm(list=ls(all=TRUE))
 
 # Set working directory, if running interactively.
-# wd_path <- '~/GitHub/QMB6912S22/demo_04/FlyReel_Figures'
+# wd_path <- '~/GitHub/QMB6912S22/demo_04/FlyReel_Density'
 # setwd(wd_path)
 
 
@@ -53,8 +53,10 @@ fig_dir <- 'Figures'
 # Load libraries
 ##################################################
 
-# library(xtable)
-# library(texreg)
+# No libraries required.
+# Otherwise would have a command like the following.
+# library(name_of_R_package)
+
 
 
 ##################################################
