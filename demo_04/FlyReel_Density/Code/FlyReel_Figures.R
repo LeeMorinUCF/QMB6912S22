@@ -71,11 +71,13 @@ flyreels <- read.csv(file = in_file_name, header = FALSE,
                      col.names = fly_col_names)
 
 # Initial inspection.
-summary(flyreels)
+print('Summary of FlyReels Dataset:')
+print(summary(flyreels))
 
 
 ##################################################
 # Plot EDF in base R and output to figure.
+print('Plotting ECDF.')
 ##################################################
 
 ecdf_price <- ecdf(flyreels[, 'Price'])
@@ -92,6 +94,7 @@ dev.off()
 
 ##################################################
 # Relative histogram of price.
+print('Ploting relative histogram of price.')
 ##################################################
 
 fig_file_name <- 'hist_prices.eps'
@@ -107,6 +110,8 @@ dev.off()
 
 ##################################################
 # Kernel-smoothed pdf of the natural logarithm of price.
+print('Plotting kernel-smoothed pdf')
+print('of the natural logarithm of price.')
 ##################################################
 
 density_log_price <- density(log(flyreels[, 'Price']))
