@@ -27,6 +27,23 @@
 
 
 ################################################################################
+# Generate the Figures with R
+################################################################################
+
+echo "#-------------------------------------------------"
+echo ""
+echo "Analyzing the data in R..."
+echo ""
+
+Rscript Code/my_script.R > Code/my_script.out
+
+echo "#-------------------------------------------------"
+echo ""
+echo "Finished analyzing the data in R."
+echo ""
+
+
+################################################################################
 # Build the pdf Document with LaTeX
 ################################################################################
 
@@ -40,10 +57,10 @@ cd Paper
 # pdflatex Paper.tex
 
 # Need extra permission in the VirtualBox machine.
-pdflatex -shell-escape Paper.tex
+pdflatex -shell-escape Paper_w_Figure.tex
 
 # Run the command twice to obtain references in document.
-pdflatex -shell-escape Paper.tex
+pdflatex -shell-escape Paper_w_Figure.tex
 
 cd ..
 echo ""
