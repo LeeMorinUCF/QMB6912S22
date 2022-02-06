@@ -1,28 +1,29 @@
 ##################################################
 #
-# QMB 6911 Capstone Project
+# QMB 6912 Capstone Project
 # PMSM-BA program
 #
 # Lealand Morin, Ph.D.
 # Assistant Professor
 # Department of Economics
-# College of Business Administration
+# College of Business
 # University of Central Florida
 #
-# July 21, 2020
+# February 6, 2022
 #
 ##################################################
 #
-# Sample code for the problem sets in the course QMB 6911,
+# Sample code for the problem sets in the course QMB 6912,
 # Capstone Project in Business Analytics, for the PMSM-BA
 # program.
+# This script analyzes the covariance between variables
+# and makes comparisons between subsets of the data.
 #
 # Dependencies:
 #   libraries to be added
 #
 #
 ##################################################
-
 
 ##################################################
 # Preparing the Workspace
@@ -32,9 +33,9 @@
 # Clear workspace.
 rm(list=ls(all=TRUE))
 
-# Set working directory.
-wd_path <- '~/Teaching/QMB6911_Summer_2021/Draft1'
-setwd(wd_path)
+# Set working directory, if running interactively.
+# wd_path <- '~/GitHub/QMB6912S22/demo_05/FlyReel_Data_Vis'
+# setwd(wd_path)
 
 
 # Set data directory.
@@ -44,22 +45,22 @@ data_dir <- 'Data'
 fig_dir <- 'Figures'
 
 # Set directory for storing tables.
-tab_dir <- 'Tables'
+# tab_dir <- 'Tables' # Last week.
 
 
 ##################################################
 # Load libraries
 ##################################################
 
-library(xtable)
-# library(texreg)
+# Packages with the Box-Cox Transformation
+library(EnvStats)
+library(MASS)
+
 
 
 ##################################################
-# Problem Set 3: Summarize Covariates
+# Load Data
 ##################################################
-
-# Contents of MorinPS3/
 
 # Set parameters for flyreel dataset.
 in_file_name <- sprintf('%s/%s', data_dir, 'FlyReels.csv')
@@ -71,142 +72,75 @@ flyreels <- read.csv(file = in_file_name, header = FALSE,
                      col.names = fly_col_names)
 
 # Initial inspection.
-summary(flyreels)
+print('Summary of FlyReels Dataset:')
+print(summary(flyreels))
 
-#--------------------------------------------------
-# Summarize numeric variables.
-#--------------------------------------------------
-
-# Summarize numeric variables by country of manufacture.
-country_sum <- data.frame(Country = unique(flyreels$Country))
-for (var_name in colnames(flyreels)[lapply(flyreels, class) == 'numeric']) {
-
-  col_names <- sprintf('%s %s', c('Min.', 'Mean', 'Max.'), var_name)
-  country_sum[, col_names] <- tapply(flyreels$Price, flyreels$Country,
-                                     function(x) format(summary(x), scientific = FALSE)[c(1,4,6)])
-
-}
-
-out_tab <- t(country_sum[, 2:ncol(country_sum)])
-colnames(out_tab) <- country_sum[, 1]
-
-
-# Output to TeX file.
-out_xtable <- xtable(out_tab[, ],
-                     digits = 0, label = 'tab:summ_by_country',
-                     # caption = 'Goodness of Fit for Fixed vs. Monthly Transition Matrices (1-step-ahead forecasts)',
-                     caption = 'Summary by Country of Manufacture')
-
-tab_file_name <- sprintf('summ_by_country.tex')
-tab_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-cat(print(out_xtable), file = tab_file_name, append = FALSE)
-
-
-
-# Summarize numeric variables by brand of fly reel.
-country_sum <- data.frame(Brand = unique(flyreels$Brand))
-for (var_name in colnames(flyreels)[lapply(flyreels, class) == 'numeric']) {
-
-  col_names <- sprintf('%s %s', c('Min.', 'Mean', 'Max.'), var_name)
-  country_sum[, col_names] <- tapply(flyreels$Price, flyreels$Brand,
-                                     function(x) format(summary(x), scientific = FALSE)[c(1,4,6)])
-
-}
-
-out_tab <- t(country_sum[, 2:ncol(country_sum)])
-colnames(out_tab) <- country_sum[, 1]
-
-
-
-
-#--------------------------------------------------
-# Summarize categorical variables.
-#--------------------------------------------------
-
-table(flyreels[, 'Brand'], useNA = 'ifany')
-table(flyreels[, 'Sealed'], useNA = 'ifany')
-table(flyreels[, 'Country'], useNA = 'ifany')
-table(flyreels[, 'Machined'], useNA = 'ifany')
-
-# Comparison across brand names.
-table(flyreels[, 'Brand'], flyreels[, 'Sealed'], useNA = 'ifany')
-table(flyreels[, 'Brand'], flyreels[, 'Country'], useNA = 'ifany')
-table(flyreels[, 'Brand'], flyreels[, 'Machined'], useNA = 'ifany')
-
-# Assemble these into a table for output.
-out_tab <- cbind(table(flyreels[, 'Brand'], useNA = 'ifany'),
-                 table(flyreels[, 'Brand'], flyreels[, 'Country'], useNA = 'ifany'),
-                 table(flyreels[, 'Brand'], flyreels[, 'Sealed'], useNA = 'ifany'),
-                 table(flyreels[, 'Brand'], flyreels[, 'Machined'], useNA = 'ifany')
-                 )
-
-# Specify column names and add totals.
-colnames(out_tab) <- c("Total", "China", "Korea", "USA",
-                       "Unsealed", "Sealed", "Cast", "Machined")
-out_tab <- rbind(out_tab, colSums(out_tab))
-rownames(out_tab)[length(rownames(out_tab))] <- "Totals"
-
-# Output a file with a LaTeX table.
-
-
-
-# Output to TeX file.
-out_xtable <- xtable(out_tab[, c(2, 3, 4, 1)],
-                     digits = 0, label = 'tab:country_by_brand',
-                     # caption = 'Goodness of Fit for Fixed vs. Monthly Transition Matrices (1-step-ahead forecasts)',
-                     caption = 'Country of Manufacture by Brand of Fly Reel')
-
-tab_file_name <- sprintf('country_by_brand.tex')
-tab_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-cat(print(out_xtable), file = tab_file_name, append = FALSE)
-
-
-# Output to TeX file.
-out_xtable <- xtable(out_tab[, c(5:8, 1)],
-                     digits = 0, label = 'tab:design_by_brand',
-                     # caption = 'Goodness of Fit for Fixed vs. Monthly Transition Matrices (1-step-ahead forecasts)',
-                     caption = 'Reel Design by Brand of Fly Reel')
-
-tab_file_name <- sprintf('design_by_brand.tex')
-tab_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-cat(print(out_xtable), file = tab_file_name, append = FALSE)
-
-
-# Need to fix this one.
 
 
 ##################################################
-# Problem Set 4: Analyze Dependent Variable
+# Generating Variables
 ##################################################
 
-# Plot EDF in base R and output to figure.
-ecdf_price <- ecdf(flyreels[, 'Price'])
-fig_file_name <- 'ecdf_prices.eps'
-out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
-plot(ecdf_price,
-     main = 'Empirical Cumulative Distribution Function of Fly Reel Prices',
-     xlab = 'Price',
-     ylab = 'Empirical C.D.F.')
-dev.off()
+# Set categorical variables as factors.
+cat_var_list <- colnames(flyreels)[lapply(flyreels, class) == "character"]
+for (var_name in cat_var_list) {
+  flyreels[, var_name] <- as.factor(flyreels[, var_name])
+}
+
+# Initial inspection.
+print('FlyReels Dataset with Categorical Factors:')
+print(summary(flyreels))
 
 
-# Relative histogram of price.
-fig_file_name <- 'hist_prices.eps'
-out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
-hist(flyreels[, 'Price'],
-     main = 'Relative Histogram of Fly Reel Prices',
-     xlab = 'Price',
-     probability = TRUE)
-dev.off()
+
+# Create a density variable.
+colnames(flyreels)
+flyreels[, 'Volume'] <- pi * (flyreels[, 'Diameter']/2)^2 * flyreels[, 'Width']
+flyreels[, 'Density'] <- flyreels[, 'Weight'] / flyreels[, 'Volume']
 
 
-# Kernel-smoothed pdf of the natural logarithm of price.
-density_log_price <- density(log(flyreels[, 'Price']))
+##################################################
+# Transforming the Dependent Variable
+##################################################
+
+# In Problem Set 4, we investigated the distribution of
+# our dependent variable,.
+# We analyzed the distribution of the prices in levels
+# and by taking logarithms.
+# Now we will employ the Box-Cox transformation
+# to decide between these specifications.
+# First, we can analyze the distributions
+# to determine whether they are normally distributed.
+
+
+
+##################################################
+# Kernel-smoothed pdf of fly reel price.
+print('Plotting kernel-smoothed pdf')
+print('of fly reel price.')
+##################################################
+
+density_price <- density(flyreels[, 'Price'])
 fig_file_name <- 'density_prices.eps'
+out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+setEPS()
+postscript(out_file_name)
+plot(density_price,
+     main = 'Kernel-smoothed pdf of Fly Reel Prices',
+     xlab = 'Price')
+dev.off()
+
+
+
+
+##################################################
+# Kernel-smoothed pdf of the natural logarithm of price.
+print('Plotting kernel-smoothed pdf')
+print('of the natural logarithm of price.')
+##################################################
+
+density_log_price <- density(log(flyreels[, 'Price']))
+fig_file_name <- 'density_log_prices.eps'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
 setEPS()
 postscript(out_file_name)
@@ -216,63 +150,24 @@ plot(density_log_price,
 dev.off()
 
 
+# To compare these to the normal distribution,
+# we can draw a Q-Q plot, plotting the quantiles of
+# each on a scatterplot.
+
+
+
+
+
+
 ##################################################
-# Problem Set 5: Generating Variables and Scatterplots
+# Calculating Box-Cox Transformation
+# for Univariate Likelihood Function.
+print(c('Calculating Box-Cox Transformation',
+        'for Univariate Likelihood Function.'))
 ##################################################
 
-# Contents of MorinPS5/
-
-# Create a density variable.
-colnames(flyreels)
-flyreels[, 'Volume'] <- pi * (flyreels[, 'Diameter']/2)^2 * flyreels[, 'Width']
-flyreels[, 'Density'] <- flyreels[, 'Weight'] / flyreels[, 'Volume']
 
 
-# Relative histogram of density.
-hist(flyreels[, 'Density'],
-     main = 'Relative Histogram of Flyreel Density',
-     xlab = 'Density',
-     probability = TRUE)
-
-
-# Scatterplots.
-library(lattice)
-splom_var_list <- c('Price', 'Width', 'Diameter', 'Density',
-                           'Sealed', 'Machined')
-splom(flyreels[, splom_var_list])
-# This is a busy figure. Let's simplify it.
-
-# Create new categorical variable combining sealed and machined.
-table(flyreels[, c('Sealed', 'Machined')], useNA = 'ifany')
-flyreels[, 'Seal_Mach'] <- factor(sprintf('%s_%s',
-                                   substr(flyreels[, 'Sealed'], 1, 1),
-                                   substr(flyreels[, 'Machined'], 1, 1)))
-table(flyreels[, c('Seal_Mach', 'Sealed')], useNA = 'ifany')
-table(flyreels[, c('Seal_Mach', 'Machined')], useNA = 'ifany')
-
-# Revise list of variables for 2-dimensional factor.
-splom_var_list <- c('Price', 'Width', 'Diameter', 'Density',
-                    'Seal_Mach')
-
-
-# Plot in Scatter Plot Matrix.
-super.sym <- trellis.par.get("superpose.symbol")
-splom(~flyreels[, splom_var_list],
-      groups = Country,
-      data = flyreels,
-      panel = panel.superpose,
-      cex = 0.5,
-      varname.cex = 0.75,
-      axis.text.cex = 0.1,
-      axis.text.col = 'white',
-      key = list(title = "Three Countries of Origin",
-                 columns = 3,
-                 points = list(pch = super.sym$pch[1:3],
-                               col = super.sym$col[1:3]),
-                 text = list(levels(flyreels[, 'Country']))))
-
-
-# Output to MorinPS5.tex...
 
 
 ##################################################
@@ -380,7 +275,7 @@ summary(bc_grid_ES_opt$lambda)
 
 
 # Use the function from the MASS package.
-library(MASS)
+
 # In the MASS package, the notation is the same as for a linear model.
 summary(lm(Price ~ 1, data = flyreels))
 bc_grid_MASS <- MASS::boxcox(Price ~ 1,
@@ -629,101 +524,6 @@ summary(bc_grid_ES_opt$lm.obj)
 
 
 
-
-# Output to MorinPS8.tex...
-
-
-##################################################
-# Problem Set 9: Nonlinear Models
-##################################################
-
-# Contents of MorinPS9/
-
-#-------------------------------------------------------
-# Generalized Additive Model
-#-------------------------------------------------------
-
-library(mgcv)
-
-
-# Model specification.
-# var_list <- c('Width', 'Diameter', 'Density',
-#               'Sealed', 'Machined', 'made_in_USA')
-# var_list <- c('Width', 'Diameter', 'Density', 'Brand',
-#               'Sealed', 'Machined', 'made_in_USA')
-var_list <- c('Diameter', 'Density', 'Brand',
-              'Sealed', 'Machined', 'made_in_USA')
-gam_fmla <- as.formula(sprintf('Trans_Price ~ %s',
-                              paste(var_list, collapse = ' + ')))
-
-gam_model_1 <- gam(gam_fmla, data = flyreels)
-summary(gam_model_1)
-
-
-# Allow for some nonlinearity.
-var_list <- c('s(Diameter)', 's(Density)', 'Brand',
-              'Sealed', 'Machined', 'made_in_USA')
-gam_fmla <- as.formula(sprintf('Trans_Price ~ %s',
-                               paste(var_list, collapse = ' + ')))
-
-gam_model_2 <- gam(gam_fmla, data = flyreels)
-summary(gam_model_2)
-
-
-#-------------------------------------------------------
-# Box-Tidwell Transformation
-#-------------------------------------------------------
-
-library(car)
-
-# Model specification.
-# var_list <- c('Width', 'Diameter', 'Density',
-#               'Sealed', 'Machined', 'made_in_USA')
-# var_list <- c('Width', 'Diameter', 'Density', 'Brand',
-#               'Sealed', 'Machined', 'made_in_USA')
-# var_list <- c('Density', 'Diameter')
-# var_list <- c('Diameter')
-# var_list <- c('Density')
-bt_fmla <- as.formula(sprintf('Trans_Price ~ %s',
-                              paste(var_list, collapse = ' + ')))
-var_list <- c('Brand',
-              'Sealed', 'Machined', 'made_in_USA')
-bt_other <- as.formula(sprintf(' ~  %s',
-                              paste(var_list, collapse = ' + ')))
-
-# box.tidwell() is deprecated, replaced with boxTidwell().
-# bt_model_1 <- box.tidwell(formula = bt_fmla, other.x = bt_other, data = flyreels)
-bt_model_1 <- boxTidwell(formula = bt_fmla, other.x = bt_other, data = flyreels)
-print(bt_model_1)
-
-
-
-
-
-# Output to MorinPS9.tex...
-
-
-##################################################
-# Problem Set 10: Testing for Country-of-manufacture Effect
-##################################################
-
-# Contents of MorinPS10/
-
-
-summary(gam_model_2)
-
-
-# Output to MorinPS10.tex...
-
-
-##################################################
-# Problem Set 11: Analysis of Drag-fishing Reels
-##################################################
-
-# Contents of MorinPS11/
-
-
-# Output to MorinPS11.tex...
 
 
 ##################################################
