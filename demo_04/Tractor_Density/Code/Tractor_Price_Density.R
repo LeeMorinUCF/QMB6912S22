@@ -74,7 +74,7 @@ print(summary(tractor_sales))
 
 ##################################################
 # Relative histogram of saleprice.
-print('Ploting relative histograms of saleprice.')
+print('Plotting relative histograms of saleprice.')
 ##################################################
 
 # First plot a histogram with the default options.
@@ -130,7 +130,7 @@ setEPS()
 postscript(out_file_name)
 hist(tractor_sales[, 'log_saleprice'], breaks = 50,
      main = c('Histogram of the Logarithm of Tractor Prices',
-              'Number of Breaks: 5'),
+              'Number of Breaks: 50'),
      xlab = 'Logarithm of Price',
      probability = TRUE)
 dev.off()
@@ -143,7 +143,7 @@ dev.off()
 
 ##################################################
 # Univariate kernel estimation
-print('Ploting kernel-smoothed densities of saleprice.')
+print('Plotting kernel-smoothed densities of saleprice.')
 ##################################################
 
 # Kernel-density smoothing is an example of a nonparametric method.

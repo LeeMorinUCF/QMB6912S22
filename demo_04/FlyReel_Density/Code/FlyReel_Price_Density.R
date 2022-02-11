@@ -96,7 +96,7 @@ dev.off()
 
 ##################################################
 # Relative histogram of price.
-print('Ploting relative histogram of price.')
+print('Plotting relative histogram of price.')
 ##################################################
 
 fig_file_name <- 'hist_prices.eps'
