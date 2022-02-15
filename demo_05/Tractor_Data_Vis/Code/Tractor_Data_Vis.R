@@ -19,6 +19,13 @@
 # The output includes plots of scatterplot matrices
 # and other data visualizations.
 #
+# Dependencies:
+#   sm for smoothing density estimates.
+#   vcd for Visualizing Categorical Data
+#   gclus for color-coding by sign of correlation.
+#     using cluster analysis.
+#   xtable for creating code for LaTeX tables
+#
 ##################################################
 
 
@@ -45,7 +52,7 @@ data_dir <- 'Data'
 fig_dir <- 'Figures'
 
 # Set directory for storing tables.
-# tab_dir <- 'Tables' # Last week.
+tab_dir <- 'Tables'
 
 ##################################################
 # Load libraries
@@ -56,6 +63,14 @@ library(sm)
 
 # Library for Visualizing Categorical Data
 library(vcd)
+
+# Library for Scatter plot matrix with color-coding
+# by sign of correlation.
+library(gclus)
+
+
+# Library for creating code for LaTeX tables.
+library(xtable)
 
 ##################################################
 # Load Data
@@ -201,6 +216,7 @@ dev.off()
 
 ##################################################
 # Investigate whether Brand is Related to Time of Year
+print('Plotting Sales Volume by Brand and Season of Sale')
 ##################################################
 
 # Create a factor that is a single categorical variable season.
@@ -227,7 +243,108 @@ fig_file_name <- 'brand_and_season_sales.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
 pdf(out_file_name)
 spine(counts,
-      main = "Spinogram of Sales by Brand and Season")
+      main = 'Spinogram of Sales by Brand and Season')
+dev.off()
+
+#--------------------------------------------------
+# Output Sales Volume Table to TeX file.
+#--------------------------------------------------
+
+
+# Select values for output.
+out_tab <- counts
+print(out_tab)
+
+
+out_xtable <- xtable(out_tab[, ],
+                     digits = 0,
+                     label = 'tab:brand_and_season_sales',
+                     caption = 'Sales Volume by Brand and Season')
+
+tab_file_name <- sprintf('brand_and_season_sales.tex')
+tab_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
+cat(print(out_xtable), file = tab_file_name, append = FALSE)
+
+
+
+##################################################
+# Investigate correlation of numerical variables
+# Scatter plot matrix
+# Color-coding produced with the gclus package
+print('Plotting Prices agains Numeric Variables')
+##################################################
+
+# Select some numerical variables.
+colnames(tractor_sales)
+colnames(tractor_sales)[c(13, 2, 3, 4)]
+
+# Create a covariance matrix and determine
+# parameters for scattergraph matrix.
+mydata <- tractor_sales[c(13, 2, 3, 4)]
+mydata.corr <- abs(cor(mydata))
+mycolors <- dmat.color(mydata.corr)
+# Order by magnitude of correlation.
+myorder <- order.single(mydata.corr)
+# myorder <- c(1,2,3,4) # Retain order.
+
+
+# Plot the scatterplot matrix.
+fig_file_name <- 'scatter_matrix.pdf'
+out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+pdf(out_file_name)
+cpairs(mydata,
+       myorder,
+       panel.colors = mycolors,
+       gap = 0.5,
+       main = c('Scatterplot Matrix Colored by Correlation')
+)
+dev.off()
+
+
+#--------------------------------------------------
+# Output Correlation Matrix to TeX file.
+#--------------------------------------------------
+
+
+# Select values for output.
+out_tab <- cor(mydata)
+colnames(out_tab) <- c('Log. of Price', 'Horsepower', 'Age', 'Engine Hours')
+rownames(out_tab) <- c('Log. of Price', 'Horsepower', 'Age', 'Engine Hours')
+print(out_tab)
+
+
+out_xtable <- xtable(out_tab[, ],
+                     digits = 3,
+                     label = 'tab:correlation',
+                     caption = 'Correlation Matrix of Numeric Variables')
+
+tab_file_name <- sprintf('correlation.tex')
+tab_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
+cat(print(out_xtable), file = tab_file_name, append = FALSE)
+
+
+
+##################################################
+# Investigate relationship between prices,
+# horsepower and age.
+print('Plotting relationship between prices, horsepower and age')
+##################################################
+
+# Calculate the radius of the bubbles
+# so that the area represents horsepowwer.
+r <- sqrt(tractor_sales[, 'horsepower']/pi)
+
+# Plot the bubble plot.
+fig_file_name <- 'bubble_plot.pdf'
+out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+pdf(out_file_name)
+symbols(tractor_sales[, 'age'],
+        tractor_sales[, 'log_saleprice'],
+        r,
+        inches=0.30, fg="white", bg="lightblue",
+        main = "Bubble Plot with point size proportional to horsepower",
+        ylab = "Log. of Sale Price",
+        xlab = "Age of Tractor (years)")
 dev.off()
 
 
