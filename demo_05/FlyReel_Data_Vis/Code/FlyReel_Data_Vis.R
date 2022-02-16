@@ -20,7 +20,7 @@
 # and makes comparisons between subsets of the data.
 #
 # Dependencies:
-#   libraries to be added
+#   lattice library to create matrices of scatterplots
 #
 #
 ##################################################

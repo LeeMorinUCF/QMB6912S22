@@ -57,10 +57,10 @@ echo ""
 cd Paper
 
 # We need options for extra permission in the VirtualBox machine.
-pdflatex -shell-escape Paper_w_Data_Visualization.tex
+pdflatex -shell-escape FlyReel_Data_Vis.tex
 
 # Run the command twice to obtain references in document.
-pdflatex -shell-escape Paper_w_Data_Visualization.tex
+pdflatex -shell-escape FlyReel_Data_Vis.tex
 
 echo ""
 
