@@ -197,10 +197,12 @@ print('Generating Scatterplot Matrices.')
 
 # Create scatterplots of numeric variables.
 splom_var_list <- c('Price', 'Width', 'Diameter', 'Density')
-fig_file_name <- 'slpom_num_only.eps'
+# fig_file_name <- 'slpom_num_only.eps'
+fig_file_name <- 'slpom_num_only.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+# setEPS()
+# postscript(out_file_name)
+pdf(out_file_name)
 splom(flyreels[, splom_var_list])
 dev.off()
 
@@ -208,10 +210,13 @@ dev.off()
 # Add some categorical variables to scatterplots.
 splom_var_list <- c('Price', 'Width', 'Diameter', 'Density',
                     'Sealed', 'Machined')
-fig_file_name <- 'slpom_with_cat.eps'
+
+# fig_file_name <- 'slpom_with_cat.eps'
+fig_file_name <- 'slpom_with_cat.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+# setEPS()
+# postscript(out_file_name)
+pdf(out_file_name)
 splom(flyreels[, splom_var_list])
 dev.off()
 # This is a busy figure with multiple categorical variables.
@@ -230,10 +235,12 @@ splom_var_list <- c('Price', 'Width', 'Diameter', 'Density',
                     'Seal_Mach')
 
 # Plot in scatterplot matrix.
-fig_file_name <- 'slpom_with_sealed_mach.eps'
+# fig_file_name <- 'slpom_with_sealed_mach.eps'
+fig_file_name <- 'slpom_with_sealed_mach.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+# setEPS()
+# postscript(out_file_name)
+pdf(out_file_name)
 splom(flyreels[, splom_var_list])
 dev.off()
 
@@ -247,12 +254,12 @@ print(c('Generating Scatterplot Matrices',
 
 
 # Color by country of origin.
-fig_file_name <- 'slpom_by_country.eps'
-# fig_file_name <- 'slpom_by_country.pdf'
+# fig_file_name <- 'slpom_by_country.eps'
+fig_file_name <- 'slpom_by_country.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
-# pdf(out_file_name)
+# setEPS()
+# postscript(out_file_name)
+pdf(out_file_name)
 super.sym <- trellis.par.get("superpose.symbol")
 splom(~flyreels[, splom_var_list],
       groups = Country,
