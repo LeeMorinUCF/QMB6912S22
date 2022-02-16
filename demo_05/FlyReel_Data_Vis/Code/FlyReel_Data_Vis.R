@@ -52,6 +52,9 @@ fig_dir <- 'Figures'
 # Load libraries
 ##################################################
 
+# Library for smoothing density estimates.
+library(sm)
+
 # lattice library to create matrices of scatterplots
 library(lattice)
 
@@ -103,6 +106,87 @@ flyreels[, 'Density'] <- flyreels[, 'Weight'] / flyreels[, 'Volume']
 #      main = 'Relative Histogram of Flyreel Density',
 #      xlab = 'Density',
 #      probability = TRUE)
+
+
+
+# Generate a new variable log_Price.
+flyreels[, 'log_Price'] <- log(flyreels[, 'Price'])
+
+
+
+
+##################################################
+# Relative histogram and density of Price.
+print('Plotting histogram and density of log_Price.')
+##################################################
+
+# Start with the log of prices because prices were skewed.
+# We will investigate this further in another problem set.
+
+# First plot a histogram with the default options.
+fig_file_name <- 'hist_dens_log_price.pdf'
+out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+# For an eps file, as before:
+# setEPS()
+# postscript(out_file_name)
+# This produces a pdf instead:
+pdf(out_file_name)
+hist(flyreels[, 'log_Price'],
+     main = 'Histogram and Density of Log. Fly Reel Prices',
+     xlab = 'Price',
+     col = 'red',
+     probability = TRUE)
+rug(flyreels[, 'log_Price'])
+lines(density(flyreels[, 'log_Price']),
+      col = 'blue',
+      lwd = 3)
+dev.off()
+
+
+##################################################
+# Relative histogram and density of Price.
+print('Plotting figures by Country of Manufacture.')
+##################################################
+
+# Investigate the value of fly reels made in America.
+table(flyreels[, 'Country'], useNA = 'ifany')
+
+
+# The densities could be plotted separately.
+plot(density(flyreels[flyreels[, 'Country'] == 'USA', 'log_Price']),
+     col = 'blue',
+     lwd = 3,
+     xlim = c(2, 8))
+lines(density(flyreels[flyreels[, 'Country'] == 'China', 'log_Price']),
+      col = 'red',
+      lwd = 3)
+lines(density(flyreels[flyreels[, 'Country'] == 'Korea', 'log_Price']),
+     col = 'darkgreen',
+     lwd = 3)
+# This approach is useful because it clearly specifies
+# which is which.
+
+
+# Now plot them together with the sm package.
+# It appears as though it plots them in order of the values
+# of the Country indicator.
+fig_file_name <- 'dens_by_country.pdf'
+out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+pdf(out_file_name)
+sm.density.compare(flyreels[, 'log_Price'],
+                   flyreels[, 'Country'],
+                   xlab = "Log. of Price",
+                   lwd = 3,
+                   col = c('red','darkgreen', 'blue'))
+title(main = 'Log. of Price by Country of Manufacture')
+legend('topright', c('USA', 'China', 'Korea'),
+       fill = c('blue', 'red','darkgreen'),
+       cex = 0.75)
+dev.off()
+
+
+
+
 
 
 ##################################################
@@ -164,9 +248,11 @@ print(c('Generating Scatterplot Matrices',
 
 # Color by country of origin.
 fig_file_name <- 'slpom_by_country.eps'
+# fig_file_name <- 'slpom_by_country.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
 setEPS()
 postscript(out_file_name)
+# pdf(out_file_name)
 super.sym <- trellis.par.get("superpose.symbol")
 splom(~flyreels[, splom_var_list],
       groups = Country,
@@ -184,6 +270,50 @@ splom(~flyreels[, splom_var_list],
                  ))
 dev.off()
 
+
+
+##################################################
+# Generating Dot Chart
+# Ordered by Country of Manufacture and Brand.
+print(c('Generating Dot Charts',
+        'Ordered by Country of Manufacture and Brand.'))
+##################################################
+
+# Make a matrix of average prices by brand.
+table(flyreels$Brand, useNA = 'ifany')
+table(flyreels$Brand,
+      flyreels$Country, useNA = 'ifany')
+
+
+# Select the relevant columns and calculate average prices.
+x <- aggregate(formula = Price ~ Brand + Country,
+               data = flyreels[, c('Price', 'Brand', 'Country')],
+               FUN = mean)
+
+# Sort the data.
+x <- x[order(x$Price), ]
+
+
+# Create a factor and assign color names
+# by the levels of the factor.
+x$color <- NA
+x$color[x$Country == 'USA'] <- 'blue'
+x$color[x$Country == 'China'] <- 'red'
+x$color[x$Country == 'Korea'] <- 'darkgreen'
+
+# Now plot the dotchart.
+fig_file_name <- 'dotchart_brand_country.pdf'
+out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+pdf(out_file_name)
+dotchart(x$Price,
+         labels = x$Brand,
+         cex = 0.7,
+         pch = 19,
+         groups = x$Country,
+         gcolor = "black", color = x$color,
+         main = "Price of Fly Reels\nGrouped by Brand",
+         xlab = "Price")
+dev.off()
 
 
 
