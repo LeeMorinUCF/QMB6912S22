@@ -39,11 +39,20 @@
                                                                   
 [1] "Name"     "Brand"    "Weight"   "Diameter" "Width"    "Price"    "Sealed"  
 [8] "Country"  "Machined"
+[1] "Plotting histogram and density of log_Price."
+null device 
+          1 
+[1] "Plotting figures by Country of Manufacture."
+
+China Korea   USA 
+   27    86   135 
+pdf 
+  2 
 [1] "Generating Scatterplot Matrices."
-null device 
-          1 
-null device 
-          1 
+pdf 
+  2 
+pdf 
+  2 
       Machined
 Sealed  No Yes
    No   20  74
@@ -60,8 +69,43 @@ Seal_Mach  No Yes
       N_Y   0  74
       Y_N  11   0
       Y_Y   0 143
-null device 
-          1 
+pdf 
+  2 
 [1] "Generating Scatterplot Matrices"    "Colored by Country of Manufacture."
-null device 
-          1 
+pdf 
+  2 
+[1] "Generating Dot Charts"                       
+[2] "Ordered by Country of Manufacture and Brand."
+
+           3-TAND              Abel             Allen             Aspen 
+               15                15                25                 8 
+            Bauer            Cheeky              ECHO            Galvan 
+                2                11                12                23 
+            Hatch              Loop          Nautilus             Orvis 
+                8                14                15                 2 
+             Ross              Sage            Taylor               TFO 
+               28                 6                12                16 
+            Tibor Waterworks-Lamson 
+                4                32 
+                   
+                    China Korea USA
+  3-TAND               15     0   0
+  Abel                  0     0  15
+  Allen                 0    18   7
+  Aspen                 0     0   8
+  Bauer                 0     0   2
+  Cheeky               11     0   0
+  ECHO                  0    12   0
+  Galvan                0     0  23
+  Hatch                 0     0   8
+  Loop                  0    14   0
+  Nautilus              0     0  15
+  Orvis                 1     0   1
+  Ross                  0     0  28
+  Sage                  0     6   0
+  Taylor                0    12   0
+  TFO                   0    16   0
+  Tibor                 0     0   4
+  Waterworks-Lamson     0     8  24
+pdf 
+  2 
