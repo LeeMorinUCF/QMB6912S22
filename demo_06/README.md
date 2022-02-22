@@ -6,9 +6,9 @@ regression assumption of homogeneity and normality of variance.
 A regression model is then used to fit the transformed response variable. 
 
 This framework was analyzed in detail by the legendary statisticians
-(George Box)[https://en.wikipedia.org/wiki/George_E._P._Box]
+[George Box](https://en.wikipedia.org/wiki/George_E._P._Box)
 and 
-(Sir David Cox)[https://en.wikipedia.org/wiki/David_Cox_(statistician)]
+[Sir David Cox](https://en.wikipedia.org/wiki/David_Cox_(statistician))
 in their article 
 "An Analysis of Transformations" published in
 the *Journal of the Royal Statistical Society*
@@ -25,32 +25,32 @@ The Website [Towards Data Science](https://towardsdatascience.com/)
 includes an article explaining the transformation and implementing it in Python: 
 [Box-Cox Transformation: Explained](https://towardsdatascience.com/box-cox-transformation-explained-51d745e34203)
 
-The Website (SPC for Excel)[www.spcforexcel.com]
+The Website [SPC for Excel](www.spcforexcel.com)
 gives a demonstration of the practical steps involved in
 determining the degree of improvement after performing the Box-Cox transformation
-on the Webpage (Box-Cox Transformation)[https://www.spcforexcel.com/knowledge/basic-statistics/box-cox-transformation].
+on the Webpage [Box-Cox Transformation](https://www.spcforexcel.com/knowledge/basic-statistics/box-cox-transformation).
 
 
-The Website (The Business Professor)[https://thebusinessprofessor.com/]
-offers a brief description of (how the transformation is used)[https://thebusinessprofessor.com/en_US/research-analysis-decision-science/box-cox-transformation-definition]
+The Website [The Business Professor](https://thebusinessprofessor.com/)
+offers a brief description of [how the transformation is used](https://thebusinessprofessor.com/en_US/research-analysis-decision-science/box-cox-transformation-definition)
 within a regression model. 
-One of the important issueas is that now the model predicts
+One of the important issues is that now the model predicts
 the transformation of the variable, 
 rather than the variable itself, 
 so it complicates the interpretation of the regression model. 
 These points are also addressed in a review article
 in The Statistician
 entitled
-(The Box-Cox transformation technique: a review)[http://staff.ustc.edu.cn/~zwp/teach/Reg/Boxcox.pdf].
+[The Box-Cox transformation technique: a review](http://staff.ustc.edu.cn/~zwp/teach/Reg/Boxcox.pdf).
 
 R users might appreciate the example in 
-the Website (Statology)[www.statology.org]
+the Website [Statology](www.statology.org)
 in an article called 
-(How to Perform a Box-Cox Transformation in R (With Examples))[https://www.statology.org/box-cox-transformation-in-r/]. 
+[How to Perform a Box-Cox Transformation in R (With Examples)](https://www.statology.org/box-cox-transformation-in-r/). 
 
-The Website (Encyclopedia of Mathematics)[https://encyclopediaofmath.org/wiki/Main_Page]
+The Website [Encyclopedia of Mathematics](https://encyclopediaofmath.org/wiki/Main_Page)
 offers a more technical description
-of the (Box-Cox transformation)[https://encyclopediaofmath.org/wiki/Box-Cox_transformation], 
+of the [Box-Cox transformation](https://encyclopediaofmath.org/wiki/Box-Cox_transformation), 
 including the relationship to a family of distributions 
 called the exponential family, 
 many of which you might encounter in an advanced course in statistics. 
