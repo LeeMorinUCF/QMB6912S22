@@ -9,19 +9,21 @@
 # College of Business
 # University of Central Florida
 #
-# February 6, 2022
+# February 22, 2022
 #
 ##################################################
 #
 # Sample code for the problem sets in the course QMB 6912,
 # Capstone Project in Business Analytics, for the PMSM-BA
 # program.
-# This script analyzes the covariance between variables
-# and makes comparisons between subsets of the data.
+# This script analyzes the potential for transforming the
+# dependent variable with the Box-Cox transformation.
 #
 # Dependencies:
-#   libraries to be added
-#
+#   MASS library for the Box-Cox Transformation
+#   car library for the Box-Cox Transformation
+#   EnvStats for another version of the Box-Cox Transformation
+#     (this package is not recommended but is included for completeness.)
 #
 ##################################################
 
@@ -34,7 +36,7 @@
 rm(list=ls(all=TRUE))
 
 # Set working directory, if running interactively.
-# wd_path <- '~/GitHub/QMB6912S22/demo_05/FlyReel_Data_Vis'
+# wd_path <- '~/GitHub/QMB6912S22/demo_06/FlyReel_Box_Cox'
 # setwd(wd_path)
 
 
@@ -45,7 +47,7 @@ data_dir <- 'Data'
 fig_dir <- 'Figures'
 
 # Set directory for storing tables.
-# tab_dir <- 'Tables' # Last week.
+tab_dir <- 'Tables'
 
 
 ##################################################
@@ -53,8 +55,9 @@ fig_dir <- 'Figures'
 ##################################################
 
 # Packages with the Box-Cox Transformation
-library(EnvStats)
 library(MASS)
+library(car)
+library(EnvStats)
 
 
 
@@ -98,6 +101,11 @@ colnames(flyreels)
 flyreels[, 'Volume'] <- pi * (flyreels[, 'Diameter']/2)^2 * flyreels[, 'Width']
 flyreels[, 'Density'] <- flyreels[, 'Weight'] / flyreels[, 'Volume']
 
+# Create logarithm of dependent variable.
+flyreels[, 'log_Price'] <- log(flyreels[, 'Price'])
+
+
+
 
 ##################################################
 # Transforming the Dependent Variable
@@ -121,13 +129,13 @@ print('of fly reel price.')
 ##################################################
 
 density_price <- density(flyreels[, 'Price'])
-fig_file_name <- 'density_prices.eps'
+fig_file_name <- 'density_prices.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+pdf(out_file_name)
 plot(density_price,
-     main = 'Kernel-smoothed pdf of Fly Reel Prices',
-     xlab = 'Price')
+     main = 'Kernel-Smoothed pdf of Fly Reel Prices',
+     xlab = 'Price',
+     col = 'blue', lwd = 3)
 dev.off()
 
 
@@ -139,15 +147,21 @@ print('Plotting kernel-smoothed pdf')
 print('of the natural logarithm of price.')
 ##################################################
 
-density_log_price <- density(log(flyreels[, 'Price']))
-fig_file_name <- 'density_log_prices.eps'
+density_log_price <- density(flyreels[, 'log_Price'])
+fig_file_name <- 'density_log_prices.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+pdf(out_file_name)
 plot(density_log_price,
-     main = 'Kernel-smoothed pdf of the Natural Log. of Fly Reel Prices',
-     xlab = 'Price')
+     main = 'Kernel-Smoothed pdf of the Natural Log. of Fly Reel Prices',
+     xlab = 'Logarithm of Price',
+     col = 'blue', lwd = 3)
 dev.off()
+
+
+#--------------------------------------------------
+# Compare Prices and Transformation for Normality
+print(c('Calculating Q-Q Plots of Dependent Variable.'))
+#--------------------------------------------------
 
 
 # To compare these to the normal distribution,
@@ -155,7 +169,25 @@ dev.off()
 # each on a scatterplot.
 
 
+# Plot normal QQ plot for Fly Reel Prices.
+fig_file_name <- 'qq_prices.pdf'
+out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+pdf(out_file_name)
+qqnorm(flyreels[, 'Price'],
+       main = 'Q-Q Plot of Fly Reel Prices') # ,
+qqline(flyreels[, 'Price'],
+       col = 'blue', lwd = 3) # ,
+dev.off()
 
+# Plot normal QQ plot for the log of Fly Reel Prices.
+fig_file_name <- 'qq_log_prices.pdf'
+out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+pdf(out_file_name)
+qqnorm(flyreels[, 'log_Price'],
+       main = 'Q-Q Plot of the Log. of Fly Reel Prices') # ,
+qqline(flyreels[, 'log_Price'],
+       col = 'blue', lwd = 3) # ,
+dev.off()
 
 
 
@@ -171,15 +203,19 @@ print(c('Calculating Box-Cox Transformation',
 
 
 ##################################################
-# Problem Set 6: Univariate Likelihood Function
+# Defining a Univariate Likelihood Function
 ##################################################
 
-# Contents of MorinPS6/
-
 #--------------------------------------------------
-#
+# Coding and optimizing own function
 #--------------------------------------------------
 
+# First, define a function that performs a
+# Box-Cox transformation.
+
+# Note: "lambda" does not mean what it does in Python.
+# You can make functions on-the-fly with the "function" function in R.
+# For this reason, I call the function by a different name, Lambda_Price.
 
 # Box-Cox transformation.
 Lambda_Price <- function(price, lambda) {
@@ -208,23 +244,12 @@ log_like_uni <- function(price, lambda) {
 }
 
 # Calculate values of the log-likelihood function.
-lambda_grid <- seq(0, 2, by = 0.001)
+lambda_grid <- seq(-1, 2.5, by = 0.001)
 like_grid <- 0*lambda_grid
 for (lambda_num in 1:length(lambda_grid)) {
   like_grid[lambda_num] <- log_like_uni(price = flyreels[, 'Price'],
                                     lambda = lambda_grid[lambda_num])
 }
-
-# Calculate the log-likelihood function.
-plot(x = lambda_grid, y = like_grid,
-     type = 'l',
-     main = 'Log-likelihood Function',
-     xlab = 'Lambda',
-     ylab = 'Log-likelihood')
-
-# Calculate restricted likelihood values for mu = 0, 1.
-like_mu_0 <- log_like_uni(price = flyreels[, 'Price'], lambda = 0)
-like_mu_1 <- log_like_uni(price = flyreels[, 'Price'], lambda = 1)
 
 # Find the MLE, the unrestricted estimate.
 lambda_hat <- lambda_grid[which.max(like_grid)]
@@ -232,296 +257,174 @@ like_MLE <- max(like_grid)
 # Check:
 # like_MLE == log_like_uni(price = flyreels[, 'Price'], lambda = lambda_hat)
 
+# Calculate restricted likelihood values for mu = 0, 1.
+like_mu_0 <- log_like_uni(price = flyreels[, 'Price'], lambda = 0)
+like_mu_1 <- log_like_uni(price = flyreels[, 'Price'], lambda = 1)
+
+
+
+
+# Plot the log-likelihood function.
+fig_file_name <- 'box_cox_loglike_uni.pdf'
+out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+pdf(out_file_name)
+plot(x = lambda_grid, y = like_grid,
+     type = 'l',
+     main = 'Log-likelihood Function',
+     xlab = 'Lambda',
+     ylab = 'Log-likelihood',
+     col = 'blue', lwd = 3)
+points(c(0, 1), c(like_mu_0, like_mu_1),
+       col = 'red', lwd = 2)
+points(lambda_hat, like_MLE,
+       col = 'red', lwd = 3)
+dev.off()
+
+#--------------------------------------------------
+# Testing for appropriate transformation
+#--------------------------------------------------
+
+# Now consider the statistical properties of these estimates.
 
 # Calculate likelihood ratio statistics.
 LR_stat_0 <- - 2*(like_mu_0 - like_MLE)
+print(LR_stat_0)
 LR_stat_1 <- - 2*(like_mu_1 - like_MLE)
+print(LR_stat_1)
+
 
 # Compare to quantile of chi-squared distribution with 1 degree of freedom.
 LR_cv_5 <- qchisq(p = 0.95, df = 1)
+print(LR_cv_5)
 
 # Calculate p-values for these tests.
 p_value_0 <- 1 - pchisq(q = LR_stat_0, df = 1)
+print(p_value_0)
 p_value_1 <- 1 - pchisq(q = LR_stat_1, df = 1)
-# Reject them both. Use the transformation at the MLE.
+print(p_value_1)
+# Statistically, this is evidence to reject them both.
+# This suggests using the transformation at the MLE.
 
 
 #--------------------------------------------------
-#
+# Using the MASS package
 #--------------------------------------------------
 
+# As an illustration, we calculated
+# the likelihood ourselves.
+# However, there exist other packages
+# to output the estimation results for
+# an optimal Box-Cox transformation.
+
+
+# Use the function from the MASS package.
+# In the MASS package, the notation is the same as for a linear model.
+summary(lm(Price ~ 1, data = flyreels))
+# Note the package::function_name() notation here because
+# the boxcox call is ambiguous (several boxcox functions are loaded
+# each one from a different package).
+bc_grid_MASS <- MASS::boxcox(Price ~ 1,
+                             data = flyreels,
+                             lambda = lambda_grid)
+# Find the MLE.
+max_lambda_MASS <- bc_grid_MASS$x[which.max(bc_grid_MASS$y)]
+
+# Plot from the model object.
+fig_file_name <- 'plot_like_MASS.pdf'
+out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+pdf(out_file_name)
+plot(bc_grid_MASS$x, bc_grid_MASS$y,
+     type = 'l',
+     main = 'Log-likelihood Function (from MASS package)',
+     xlab = 'Lambda',
+     ylab = 'Log-likelihood',
+     col = 'blue', lwd = 3)
+lines(x = c(max_lambda_MASS, max_lambda_MASS),
+      y = c(min(bc_grid_MASS$y), max(bc_grid_MASS$y)),
+      lty = 'dashed')
+dev.off()
+
+
+
+#--------------------------------------------------
+# Using the car package
+#--------------------------------------------------
+
+# Use the function from the car package.
+
+# Plot from the model object.
+fig_file_name <- 'plot_like_car.pdf'
+out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+pdf(out_file_name)
+bc_grid_car <- car::boxCox(object = lm(data = flyreels,
+                                       formula = Price ~ 1),
+                           lambda = lambda_grid)
+dev.off()
+
+
+#--------------------------------------------------
+# Using the EnvStats package
+#--------------------------------------------------
 
 bc_grid_ES <- EnvStats::boxcox(x = flyreels[, 'Price'],
                                lambda = lambda_grid,
                                optimize = FALSE,
                                objective.name = "Log-Likelihood")
-plot(bc_grid_ES$lambda, bc_grid_ES$objective)
+
 
 # Find optimal value of lambda.
 bc_grid_ES_opt <- EnvStats::boxcox(x = flyreels[, 'Price'],
-                               lambda = range(lambda_grid),
-                               optimize = TRUE,
-                               objective.name = "Log-Likelihood")
+                                   lambda = range(lambda_grid),
+                                   optimize = TRUE,
+                                   objective.name = "Log-Likelihood")
 
 bc_grid_ES_opt$lambda
 
-summary(bc_grid_ES_opt$lambda)
+
+fig_file_name <- 'plot_like_EnvStats.pdf'
+out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+pdf(out_file_name)
+plot(bc_grid_ES$lambda, bc_grid_ES$objective,
+     type = 'l',
+     main = 'Log-likelihood Function (from EnvStats package)',
+     xlab = 'Lambda',
+     ylab = 'Log-likelihood')
+lines(x = c(bc_grid_ES_opt$lambda, bc_grid_ES_opt$lambda),
+      y = c(min(bc_grid_ES$objective), max(bc_grid_ES$objective)),
+      lty = 'dashed')
+dev.off()
+
 
 
 
 #--------------------------------------------------
-#
+# Compare Prices and Transformation for Normality
 #--------------------------------------------------
 
 
-# Use the function from the MASS package.
-
-# In the MASS package, the notation is the same as for a linear model.
-summary(lm(Price ~ 1, data = flyreels))
-bc_grid_MASS <- MASS::boxcox(Price ~ 1,
-                             data = flyreels,
-                             lambda = lambda_grid)
-# Plot from the model object.
-plot(bc_grid_MASS$x, bc_grid_MASS$y)
+# We already plotted normal QQ plot for Fly Reel Prices.
 
 
-
-
-# Output to MorinPS6.tex...
-
-
-##################################################
-# Problem Set 8: Running a Regression Model
-##################################################
-
-# Contents of MorinPS8/
-
-#--------------------------------------------------
-#
-#--------------------------------------------------
-
-
-# Generate new dependent variable with results from Problem Set 6.
+# Generate new dependent variable with results from estimates above.
 flyreels[, 'Trans_Price'] <- Lambda_Price(price = flyreels[, 'Price'],
                                           lambda = lambda_hat)
 
-# Specify first regression model.
-colnames(flyreels)
-var_list <- c('Width', 'Diameter', 'Density',
-              'Sealed', 'Machined', 'Country')
-lm_fmla <- as.formula(sprintf('Trans_Price ~ %s',
-                              paste(var_list, collapse = ' + ')))
-
-lm_model_1 <- lm(data = flyreels, formula = lm_fmla)
-summary(lm_model_1)
-
-#--------------------------------------------------
-#
-#--------------------------------------------------
-
-
-# Create indicator for made_in_USA.
-table(flyreels[, 'Country'], useNA = 'ifany')
-flyreels[, 'made_in_USA'] <- flyreels[, 'Country'] == 'USA'
-# Check:
-table(flyreels[, 'Country'],
-      flyreels[, 'made_in_USA'], useNA = 'ifany')
-
-
-# Specify second regression model.
-var_list <- c('Width', 'Diameter', 'Density',
-              'Sealed', 'Machined', 'made_in_USA')
-lm_fmla <- as.formula(sprintf('Trans_Price ~ %s',
-                              paste(var_list, collapse = ' + ')))
-
-lm_model_2 <- lm(data = flyreels, formula = lm_fmla)
-summary(lm_model_2)
-
-
-#--------------------------------------------------
-#
-#--------------------------------------------------
-
-
-# Consider interaction terms in third regression model.
-table(flyreels[, 'Machined'],
-      flyreels[, 'made_in_USA'], useNA = 'ifany')
-# All American reels are machined.
-table(flyreels[, 'Sealed'],
-      flyreels[, 'made_in_USA'], useNA = 'ifany')
-
-
-var_list <- c('Width', 'Diameter', 'Density',
-              'Sealed', 'Machined', 'made_in_USA',
-              'made_in_USA*Sealed')
-lm_fmla <- as.formula(sprintf('Trans_Price ~ %s',
-                              paste(var_list, collapse = ' + ')))
-
-lm_model_3 <- lm(data = flyreels, formula = lm_fmla)
-summary(lm_model_3)
-
-
-#--------------------------------------------------
-# Box-Cox specification
-#--------------------------------------------------
-
-
-# Start with specification from the second regression model.
-var_list <- c('Width', 'Diameter', 'Density',
-              'Sealed', 'Machined', 'made_in_USA')
-bc_fmla <- as.formula(sprintf('Trans_Price ~ %s',
-                              paste(var_list, collapse = ' + ')))
-
-
-bc_grid_ES <- EnvStats::boxcox(x = lm(formula = bc_fmla, data = flyreels),
-                               lambda = lambda_grid,
-                               optimize = FALSE #,
-                               # objective.name = "Log-Likelihood"
-                               )
-plot(bc_grid_ES$lambda, bc_grid_ES$objective)
-summary(bc_grid_ES$lm.obj)
-# Looks the same as the model above, with plug-in lambda MLE.
-
-
-# Find optimal value of lambda.
-bc_grid_ES_opt <- EnvStats::boxcox(x = lm(formula = bc_fmla, data = flyreels),
-                                   lambda = range(lambda_grid),
-                                   optimize = TRUE #,
-                                   # objective.name = "Log-Likelihood"
-                                   )
-
-summary(bc_grid_ES_opt$lm.obj)
-
-bc_grid_ES_opt$lambda
-
-
-
-#--------------------------------------------------
-#
-#--------------------------------------------------
-
-
-# Use the function from the MASS package.
-
-
-
-
-# In the MASS package, the notation is the same as for a linear model.
-bc_grid_MASS <- MASS::boxcox(bc_fmla,
-                             data = flyreels,
-                             lambda = lambda_grid)
-
-# Plot from the model object.
-plot(bc_grid_MASS$x, bc_grid_MASS$y)
-
-
-#--------------------------------------------------
-# One more method: Code it from scratch to maximize jointly.
-# I don't expect a student to do this but it is instructive.
-#--------------------------------------------------
-
-# Likelihood function for model with specific names
-# of dependent variables.
-log_like_multi <- function(fmla, df, lambda) {
-
-  # Perform Box-Cox transformation.
-  df[, 'Trans_Price'] <- Lambda_Price(df[, 'Price'], lambda)
-
-  # Estimate model to concentrate out remaining parameters.
-  lm_model_1 <- lm(data = df, formula = fmla)
-  n <- nrow(df)
-  sigma_2_lambda <- sum(lm_model_1$residuals^2)/n
-
-  like <- - n/2*log(2*pi*sigma_2_lambda)
-  like <- like - 1/2/sigma_2_lambda*sum(lm_model_1$residuals^2)
-  like <- like + (lambda - 1)*sum(log(df[, 'Price']))
-
-  return(like)
-
-}
-
-# Reuse specification from the second regression model.
-var_list <- c('Width', 'Diameter', 'Density',
-              'Sealed', 'Machined', 'made_in_USA')
-# Constant only.
-# var_list <- c(1)
-bc_fmla <- as.formula(sprintf('Trans_Price ~ %s',
-                              paste(var_list, collapse = ' + ')))
-
-
-# Calculate values of the log-likelihood function.
-lambda_grid <- seq(0, 2, by = 0.001)
-like_grid <- 0*lambda_grid
-for (lambda_num in 1:length(lambda_grid)) {
-  like_grid[lambda_num] <- log_like_multi(fmla = bc_fmla,
-                                          df = flyreels,
-                                          lambda = lambda_grid[lambda_num])
-}
-
-# Calculate the log-likelihood function.
-plot(x = lambda_grid, y = like_grid,
-     type = 'l',
-     main = 'Log-likelihood Function',
-     xlab = 'Lambda',
-     ylab = 'Log-likelihood')
-
-# Find the MLE, the unrestricted estimate.
-lambda_hat <- lambda_grid[which.max(like_grid)]
-like_MLE <- max(like_grid)
-
-# Perform Box-Cox transformation.
-flyreels[, 'Trans_Price'] <- Lambda_Price(flyreels[, 'Price'], lambda_hat)
-
-# Estimate model to concentrate out remaining parameters.
-lm_model_1 <- lm(data = flyreels, formula = fmla)
-summary(lm_model_1)
-# Interesting.
-
-
-
-#--------------------------------------------------
-# Try the optimization again, looping on the model.
-#--------------------------------------------------
-
-
-# Reuse specification from the second regression model.
-var_list <- c('Width', 'Diameter', 'Density',
-              'Sealed', 'Machined', 'made_in_USA')
-# Constant only.
-# var_list <- c(1)
-bc_fmla <- as.formula(sprintf('Trans_Price ~ %s',
-                              paste(var_list, collapse = ' + ')))
-
-lambda_hat_opt <- 0.40
-# lambda_hat_opt <- lambda_hat
-alpha <- 0.01
-
-for (i in 1:100) {
-
-  # Estimate the lm object after transforming with this lambda.
-  flyreels[, 'Trans_Price'] <- Lambda_Price(flyreels[, 'Price'], lambda_hat_opt)
-  lm_loop <- lm(formula = bc_fmla, data = flyreels)
-
-
-
-  # Find optimal value of lambda.
-  bc_grid_ES_opt <- EnvStats::boxcox(x = lm_loop,
-                                     lambda = range(lambda_grid),
-                                     optimize = TRUE #,
-                                     # objective.name = "Log-Likelihood"
-  )
-
-  # lambda_hat_opt <- bc_grid_ES_opt$lambda
-  lambda_hat_opt <- alpha*lambda_hat_opt + (1 - alpha)*bc_grid_ES_opt$lambda
-  print(lambda_hat_opt)
-}
-
-
-
-
-
-summary(bc_grid_ES_opt$lm.obj)
-
+# Plot normal QQ plot for Transformed Fly Reel Prices.
+fig_file_name <- 'qq_boxcox.pdf'
+out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+pdf(out_file_name)
+qqnorm(flyreels[, 'Trans_Price'],
+       main = 'Q-Q Plot of the Log. of Fly Reel Prices') # ,
+qqline(flyreels[, 'Trans_Price'],
+       col = 'blue', lwd = 3) # ,
+dev.off()
+
+# From a purely statistical perspective,
+# this provides evidence that the prices are best modeled with the transformation
+# at the optimal lambda_hat = 0.43.
+# From a practical point of view, however,
+# it is still an open question whether this
+# added complexity is warranted when other variables are added to the model.
 
 
 
