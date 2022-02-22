@@ -66,14 +66,14 @@
 
 
 \pagebreak
-\section*{Probability Density Function of Fly Reel Prices}
+\section*{Probability Density Function of Tractor Prices}
 
-Figure \ref{fig:density_prices} shows  the kernel-smoothed probability density function of fly reel prices.
+Figure \ref{fig:density_prices} shows  the kernel-smoothed probability density function of tractor prices.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[scale = 0.5, keepaspectratio=true]{../Figures/density_prices}
-  \caption{Probability Density Function of Fly Reel Prices} \label{fig:density_prices}
+  \caption{Probability Density Function of Tractor Prices} \label{fig:density_prices}
 \end{figure}
 
 
@@ -85,7 +85,7 @@ price.
 \begin{figure}[h!]
   \centering
   \includegraphics[scale = 0.5, keepaspectratio=true]{../Figures/density_log_prices}
-  \caption{Probability Density Function of the Logarithm of Fly Reel Prices} \label{fig:density_log_prices}
+  \caption{Probability Density Function of the Logarithm of Tractor Prices} \label{fig:density_log_prices}
 \end{figure}
 
 
@@ -98,22 +98,22 @@ Figure \ref{fig:qq_prices} shows a pair of Q-Q plots,
 comparing quantiles of the empirical distribution against
 the quantiles of the normal distribution. 
 In the left panel, Figure \ref{subfig:qq_prices} shows this comparison 
-for the original level of the fly reel prices, without transformation. 
+for the original level of the tractor prices, without transformation. 
 In the right panel, Figure \ref{subfig:qq_log_prices} shows this comparison 
-for the logarithmic transformation of fly reel prices, without transformation. 
+for the logarithmic transformation of tractor prices, without transformation. 
 Consistent with the pair of distributions estimated above, 
 each plot shows a divergence from a normal distribution,
-suggesting that an optimal transformation might lie somewhere in the middle.
+suggesting that an optimal transformation might lie somewhere else.
 The Box-Cox transformation allows for this possibility. 
 
 \begin{figure}[!ht]
-\subfloat[Fly Reel Prices\label{subfig:qq_prices}]{%
+\subfloat[Tractor Prices\label{subfig:qq_prices}]{%
 \includegraphics[width=0.5\textwidth]{../Figures/qq_prices}}
 \hfill
-\subfloat[Transformed Fly Reel Prices\label{subfig:qq_log_prices}]{%
+\subfloat[Transformed Tractor Prices\label{subfig:qq_log_prices}]{%
 \includegraphics[width=0.5\textwidth]{../Figures/qq_log_prices}}
 
-\caption{Q-QPlots of the Log. and Levels of Fly Reel Prices}
+\caption{Q-QPlots of the Log. and Levels of Tractor Prices}
 \label{fig:qq_prices}
 \end{figure}
 
@@ -125,9 +125,9 @@ The Box-Cox transformation allows for this possibility.
 
 
 \pagebreak
-\section{Box-Cox Transformation of Fly Reel Prices}
+\section{Box-Cox Transformation of Tractor Prices}
 
-Under the Box--Cox transformation of $P_n$, the price of reel $n$
+Under the Box--Cox transformation of $P_n$, the price of tractor $n$
 is calculated as follows,
 $$\Lambda(P_n)\equiv
   \begin{cases}
@@ -155,7 +155,7 @@ Lambda_Price <- function(price, lambda) {
 \subsection{Log-likelihood Function}
 
 Under the Box-Cox transformation,
-the fly reel prices can be decomposed into a location parameter $\mu^0$ 
+the tractor prices can be decomposed into a location parameter $\mu^0$ 
 and an error $U$, so
 $$\Lambda(P_n) = \mu^0(\lambda) + U_n,$$
 where the $U_n$s are independent, mean-zero, constant-variance 
@@ -191,14 +191,14 @@ One can calculate the value of the log-likelihood function on a grid of values
 to find an optimal value of $\lambda$.
 The plot of this likelihood function is shown in Figure \ref{fig:box_cox_loglike_uni}.
 The red points represent the values of the log-likelihood 
-at the optimum $\lambda = 0.43$ and at $\lambda = 0$ and $\lambda = 1$.
+at the optimum $\lambda = -0.17$ and at $\lambda = 0$ and $\lambda = 1$.
 
 \begin{lstlisting}[language=R]
 # Calculate values of the log-likelihood function.
 lambda_grid <- seq(-1, 2.5, by = 0.001)
 like_grid <- 0*lambda_grid
 for (lambda_num in 1:length(lambda_grid)) {
-  like_grid[lambda_num] <- log_like_uni(price = flyreels[, 'Price'],
+  like_grid[lambda_num] <- log_like_uni(price = tractor_sales[, 'saleprice'],
                                     lambda = lambda_grid[lambda_num])
 }
 \end{lstlisting}
@@ -220,10 +220,10 @@ by calculating a likelihood ratio statistic.
 > # Calculate likelihood ratio statistics.
 > LR_stat_0 <- - 2*(like_mu_0 - like_MLE)
 > print(LR_stat_0)
-[1] 26.4604
+[1] 10.26956
 > LR_stat_1 <- - 2*(like_mu_1 - like_MLE)
 > print(LR_stat_1)
-[1] 37.62182
+[1] 483.2539
 > 
 > 
 > # Compare to quantile of chi-squared distribution with 1 degree of freedom.
@@ -234,10 +234,10 @@ by calculating a likelihood ratio statistic.
 > # Calculate p-values for these tests.
 > p_value_0 <- 1 - pchisq(q = LR_stat_0, df = 1)
 > print(p_value_0)
-[1] 2.689959e-07
+[1] 0.001352434
 > p_value_1 <- 1 - pchisq(q = LR_stat_1, df = 1)
 > print(p_value_1)
-[1] 8.58782e-10
+[1] 0
 > 
 \end{lstlisting}
 
@@ -245,9 +245,12 @@ Statistically, this is evidence to reject them both.
 This suggests using the transformation at the MLE.
 However, one may want to investigate further 
 to find out whether it is worth 
-transforming the data. 
+transforming the data, 
+since the Box-Cox transformation at the MLE offers only a marginal improvement over the log transformation. 
 There exists a trade-of between interpretability and 
-the accuracy of the statistical specification. 
+the accuracy of the statistical specification, 
+and, perhaps, the log transformation is close enough 
+for practical purposes. 
 
 
 \clearpage
@@ -268,9 +271,9 @@ In the \texttt{MASS} package, the notation is the same as for a linear model.
 
 \begin{lstlisting}[language=R]
 # In the MASS package, the notation is the same as for a linear model.
-# i.e., summary(lm(Price ~ 1, data = flyreels))
-bc_grid_MASS <- MASS::boxcox(Price ~ 1,
-                             data = flyreels,
+# i.e., summary(lm(saleprice ~ 1, data = tractor_sales))
+bc_grid_MASS <- MASS::boxcox(saleprice ~ 1,
+                             data = tractor_sales,
                              lambda = lambda_grid)
 \end{lstlisting}
 
@@ -291,8 +294,8 @@ With this function, the optimization produces
 a figure automatically from the code below.
 
 \begin{lstlisting}[language=R]
-bc_grid_car <- car::boxCox(object = lm(data = flyreels,
-                                       formula = Price ~ 1),
+bc_grid_car <- car::boxCox(object = lm(data = tractor_sales,
+                                       formula = saleprice ~ 1),
                            lambda = lambda_grid)
 \end{lstlisting}
 
@@ -321,7 +324,7 @@ unless you specify otherwise.
 
 \begin{lstlisting}[language=R]
 > # Find optimal value of lambda.
-> bc_grid_ES_opt <- EnvStats::boxcox(x = flyreels[, 'Price'],
+> bc_grid_ES_opt <- EnvStats::boxcox(x = tractor_sales[, 'saleprice'],
 +                                    lambda = range(lambda_grid),
 +                                    optimize = TRUE,
 +                                    objective.name = "Log-Likelihood")
@@ -350,13 +353,13 @@ The output is plotted in Figure \ref{fig:plot_like_EnvStats}.
 
 Now compare the quantiles of the distribution of the transformed variable with 
 the original. 
-We already plotted normal QQ plot for fly reel prices when considering the log transformation.
+We already plotted normal QQ plot for tractor prices when considering the log transformation.
 Now we can generate a new dependent variable with the results from the estimates above.
 
 
 \begin{lstlisting}[language=R]
 # Generate new dependent variable with results from estimates above.
-flyreels[, 'Trans_Price'] <- Lambda_Price(price = flyreels[, 'Price'],
+tractor_sales[, 'trans_saleprice'] <- Lambda_Price(price = tractor_sales[, 'saleprice'],
                                           lambda = lambda_hat)
 \end{lstlisting}
 
@@ -366,20 +369,20 @@ shows that the quantiles of the distribution of the transformed variable
 nearly overlap with those of the normal distribution.
 From a purely statistical perspective, 
 this provides evidence that the prices are best modeled with the transformation
-at the optimal $\lambda = 0.43$.
+at the optimal $\lambda = -0.17$.
 From a practical point of view, however, 
-it is still an open question whether this 
-added complexity is warranted when other variables are added to the model. 
+the added complexity is not warranted
+when the log transformation is close enough.
 
 
 \begin{figure}[!ht]
-\subfloat[Fly Reel Prices\label{subfig:qq_prices}]{%
+\subfloat[Tractor Prices\label{subfig:qq_prices}]{%
 \includegraphics[width=0.5\textwidth]{../Figures/qq_prices}}
 \hfill
-\subfloat[Transformed Fly Reel Prices\label{subfig:qq_boxcox}]{%
+\subfloat[Transformed Tractor Prices\label{subfig:qq_boxcox}]{%
 \includegraphics[width=0.5\textwidth]{../Figures/qq_boxcox}}
 
-\caption{Q-QPlots of the Transformed Fly Reel Prices}
+\caption{Q-QPlots of the Transformed Tractor Prices}
 \label{fig:qq_prices}
 \end{figure}
 

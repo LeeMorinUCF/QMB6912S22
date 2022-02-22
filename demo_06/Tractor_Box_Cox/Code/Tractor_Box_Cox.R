@@ -153,7 +153,7 @@ fig_file_name <- 'qq_prices.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
 pdf(out_file_name)
 qqnorm(tractor_sales[, 'saleprice'],
-       main = 'Q-Q Plot of tractor Prices') # ,
+       main = 'Q-Q Plot of Tractor Prices') # ,
 qqline(tractor_sales[, 'saleprice'],
        col = 'blue', lwd = 3) # ,
 dev.off()
@@ -163,7 +163,7 @@ fig_file_name <- 'qq_log_prices.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
 pdf(out_file_name)
 qqnorm(tractor_sales[, 'log_saleprice'],
-       main = 'Q-Q Plot of the Log. of tractor Prices') # ,
+       main = 'Q-Q Plot of the Log. of Tractor Prices') # ,
 qqline(tractor_sales[, 'log_saleprice'],
        col = 'blue', lwd = 3) # ,
 dev.off()
@@ -281,8 +281,15 @@ p_value_0 <- 1 - pchisq(q = LR_stat_0, df = 1)
 print(p_value_0)
 p_value_1 <- 1 - pchisq(q = LR_stat_1, df = 1)
 print(p_value_1)
+
 # Statistically, this is evidence to reject them both.
 # This suggests using the transformation at the MLE.
+# However, one may want to investigate further
+# to find out whether it is worth
+# transforming the data,
+# since the Box-Cox transformation at the MLE
+# offers only a marginal improvement
+# over the log transformation.
 
 
 #--------------------------------------------------
@@ -298,11 +305,11 @@ print(p_value_1)
 
 # Use the function from the MASS package.
 # In the MASS package, the notation is the same as for a linear model.
-summary(lm(Price ~ 1, data = tractor_sales))
+summary(lm(saleprice ~ 1, data = tractor_sales))
 # Note the package::function_name() notation here because
 # the boxcox call is ambiguous (several boxcox functions are loaded
 # each one from a different package).
-bc_grid_MASS <- MASS::boxcox(Price ~ 1,
+bc_grid_MASS <- MASS::boxcox(saleprice ~ 1,
                              data = tractor_sales,
                              lambda = lambda_grid)
 # Find the MLE.
@@ -336,7 +343,7 @@ fig_file_name <- 'plot_like_car.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
 pdf(out_file_name)
 bc_grid_car <- car::boxCox(object = lm(data = tractor_sales,
-                                       formula = Price ~ 1),
+                                       formula = saleprice ~ 1),
                            lambda = lambda_grid)
 dev.off()
 
@@ -385,25 +392,25 @@ dev.off()
 
 
 # Generate new dependent variable with results from estimates above.
-tractor_sales[, 'Trans_Price'] <- Lambda_Price(price = tractor_sales[, 'saleprice'],
+tractor_sales[, 'trans_saleprice'] <- Lambda_Price(price = tractor_sales[, 'saleprice'],
                                           lambda = lambda_hat)
 
 # Plot normal QQ plot for Transformed tractor Prices.
 fig_file_name <- 'qq_boxcox.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
 pdf(out_file_name)
-qqnorm(tractor_sales[, 'Trans_Price'],
+qqnorm(tractor_sales[, 'trans_saleprice'],
        main = 'Q-Q Plot of the Log. of tractor Prices') # ,
-qqline(tractor_sales[, 'Trans_Price'],
+qqline(tractor_sales[, 'trans_saleprice'],
        col = 'blue', lwd = 3) # ,
 dev.off()
 
 # From a purely statistical perspective,
 # this provides evidence that the prices are best modeled with the transformation
-# at the optimal lambda_hat = 0.43.
+# at the optimal lambda_hat = -0.17.
 # From a practical point of view, however,
-# it is still an open question whether this
-# added complexity is warranted when other variables are added to the model.
+# the added complexity is not warranted
+# when the log transformation is close enough.
 
 
 
