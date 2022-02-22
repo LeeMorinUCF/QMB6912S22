@@ -14,7 +14,7 @@
 #
 ##################################################
 #
-# Tractor_Data_Vis analyzes the prices of fly reels,
+# Tractor_Data_Vis analyzes the prices of used tractors,
 # the dependent variable in the TRACTOR7.csv dataset.
 # The output includes plots of scatterplot matrices
 # and other data visualizations.
