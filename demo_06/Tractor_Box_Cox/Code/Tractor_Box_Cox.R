@@ -400,7 +400,7 @@ fig_file_name <- 'qq_boxcox.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
 pdf(out_file_name)
 qqnorm(tractor_sales[, 'trans_saleprice'],
-       main = 'Q-Q Plot of the Log. of tractor Prices') # ,
+       main = 'Q-Q Plot of Transformed tractor Prices') # ,
 qqline(tractor_sales[, 'trans_saleprice'],
        col = 'blue', lwd = 3) # ,
 dev.off()

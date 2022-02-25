@@ -363,8 +363,8 @@ tractor_sales[, 'trans_saleprice'] <- Lambda_Price(price = tractor_sales[, 'sale
                                           lambda = lambda_hat)
 \end{lstlisting}
 
-Figure \ref{fig:qq_prices} shows this comparison
-and the panel on the right, Figure \ref{subfig:qq_boxcox}, 
+Figure \ref{fig:qq2_prices} shows this comparison
+and the panel on the right, Figure \ref{subfig:qq2_boxcox}, 
 shows that the quantiles of the distribution of the transformed variable
 nearly overlap with those of the normal distribution.
 From a purely statistical perspective, 
@@ -376,14 +376,14 @@ when the log transformation is close enough.
 
 
 \begin{figure}[!ht]
-\subfloat[Tractor Prices\label{subfig:qq_prices}]{%
-\includegraphics[width=0.5\textwidth]{../Figures/qq_prices}}
+\subfloat[Log. of Tractor Prices\label{subfig:qq_log2_prices}]{%
+\includegraphics[width=0.5\textwidth]{../Figures/qq_log_prices}}
 \hfill
-\subfloat[Transformed Tractor Prices\label{subfig:qq_boxcox}]{%
+\subfloat[Transformed Tractor Prices\label{subfig:qq2_boxcox}]{%
 \includegraphics[width=0.5\textwidth]{../Figures/qq_boxcox}}
 
 \caption{Q-QPlots of the Transformed Tractor Prices}
-\label{fig:qq_prices}
+\label{fig:qq2_prices}
 \end{figure}
 
 
