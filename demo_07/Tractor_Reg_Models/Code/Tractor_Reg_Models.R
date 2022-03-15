@@ -3,7 +3,7 @@
 # QMB 6912 Capstone Project in Business Analytics
 # PMSM-BA program
 #
-# Examples of Model Specification
+# Examples of Regression Models
 #
 # Lealand Morin, Ph.D.
 # Assistant Professor
@@ -532,7 +532,8 @@ print(RSS_constrained)
 num_obs <- nrow(tractor_sales)
 num_vars <- 2*9
 
-# A test of three restrictions (one for each seasonal dummy).
+# A test of eight restrictions
+# (one for each variable minus the interaction).
 num_restr <- 9 - 1
 
 F_stat <- (RSS_constrained - RSS_unconstrained)/num_restr /
