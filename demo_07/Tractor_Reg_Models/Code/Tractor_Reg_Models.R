@@ -159,11 +159,11 @@ print(summary(lm_model_2))
 
 
 # Print the output to a LaTeX file.
-tab_file_name <- 'log_price_reg_1.tex'
+tab_file_name <- 'log_price_reg_2.tex'
 out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-texreg(lm_model_3,
+texreg(lm_model_2,
        file = out_file_name,
-       label = 'tab:log_price_reg_1',
+       label = 'tab:log_price_reg_2',
        caption = "Logarithm of Tractor Prices")
 
 
