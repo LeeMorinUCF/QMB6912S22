@@ -163,6 +163,7 @@ tab_file_name <- 'log_price_reg_2.tex'
 out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
 texreg(lm_model_2,
        file = out_file_name,
+       digits = 5,
        label = 'tab:log_price_reg_2',
        caption = "Logarithm of Tractor Prices")
 
@@ -218,6 +219,7 @@ texreg(l = list(lm_model_2,
                 lm_model_3,
                 lm_model_4),
        file = out_file_name,
+       digits = 4,
        label = 'tab:reg_reduction',
        caption = "Models for the Log. of Tractor Prices")
 

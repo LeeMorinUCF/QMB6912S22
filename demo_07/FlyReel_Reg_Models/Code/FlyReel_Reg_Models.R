@@ -401,7 +401,8 @@ print("RSS_constrained:")
 print(RSS_constrained)
 #
 # Follow the approach for conducting the F-test.
-# Do used tractor prices follow a seasonal pattern?
+# Are the coefficients the same for fly reels
+# made in the USA or elsewhere?
 #
 ##################################################
 
