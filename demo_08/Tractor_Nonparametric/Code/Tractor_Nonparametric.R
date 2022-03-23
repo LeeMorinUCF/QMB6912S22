@@ -720,7 +720,7 @@ lm_7 <- lm(data = tractor_sales,
                    diesel + fwd + manual + johndeere + cab)
 
 # Output the results to screen.
-summary(lm_7)
+print(summary(lm_7))
 
 
 
@@ -739,7 +739,7 @@ lm_sp_hp_1 <- lm(data = tractor_sales,
                    diesel + fwd + manual + johndeere + cab)
 
 # Output the results to screen.
-summary(lm_sp_hp_1)
+print(summary(lm_sp_hp_1))
 
 # The fit is slightly better but the model is very similar.
 
@@ -759,7 +759,7 @@ lm_sp_age_1 <- lm(data = tractor_sales,
                    diesel + fwd + manual + johndeere + cab)
 
 # Output the results to screen.
-summary(lm_sp_age_1)
+print(summary(lm_sp_age_1))
 
 # Again, the fit is slightly better but the model is very similar.
 
@@ -779,7 +779,7 @@ lm_sp_eng_1 <- lm(data = tractor_sales,
                     diesel + fwd + manual + johndeere + cab)
 
 # Output the results to screen.
-summary(lm_sp_eng_1)
+print(summary(lm_sp_eng_1))
 
 # Again, the fit is slightly better but the model is very similar.
 
@@ -798,7 +798,7 @@ lm_sp_full_1 <- lm(data = tractor_sales,
                     diesel + fwd + manual + johndeere + cab)
 
 # Output the results to screen.
-summary(lm_sp_full_1)
+print(summary(lm_sp_full_1))
 
 # Again, even with this aggressive step of including all three
 # variables in a semiparametric form,
