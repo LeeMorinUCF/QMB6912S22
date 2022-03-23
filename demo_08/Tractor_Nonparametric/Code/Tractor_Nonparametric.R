@@ -59,6 +59,8 @@ tab_dir <- 'Tables'
 library(xtable)
 library(texreg)
 
+# Library mgcv for estimating Generalized Additive Models
+library(mgcv)
 
 
 ##################################################

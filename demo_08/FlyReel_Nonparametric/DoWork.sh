@@ -35,7 +35,7 @@ echo ""
 echo "Analyzing the data in R..."
 echo ""
 
-Rscript Code/Tractor_Nonparametric.R > Code/Tractor_Nonparametric.out
+Rscript Code/FlyReel_Nonparametric.R > Code/FlyReel_Nonparametric.out
 
 echo "#-------------------------------------------------"
 echo ""
@@ -57,10 +57,10 @@ echo ""
 cd Paper
 
 # We need options for extra permission in the VirtualBox machine.
-pdflatex -shell-escape Tractor_Nonparametric.tex
+pdflatex -shell-escape FlyReel_Nonparametric.tex
 
 # Run the command twice to obtain references in document.
-pdflatex -shell-escape Tractor_Nonparametric.tex
+pdflatex -shell-escape FlyReel_Nonparametric.tex
 
 echo ""
 
