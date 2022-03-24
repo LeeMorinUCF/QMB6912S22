@@ -683,11 +683,22 @@ gam_fmla <- as.formula(sprintf('%s ~ %s',
                                target_var,
                               paste(var_list, collapse = ' + ')))
 
-gam_model_1 <- gam(gam_fmla, data = flyreels)
-print(summary(gam_model_1))
+gam_model_lin <- gam(gam_fmla, data = flyreels)
+print(summary(gam_model_lin))
+
+# Print the output to a LaTeX file.
+# Since texreg does not work for GAMs,
+# I just printed the output in verbatim mode.
+tab_file_name <- 'reg_GAM_lin.tex'
+out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
+cat("\\begin{verbatim}", file = out_file_name)
+sink(out_file_name, append = TRUE)
+summary(gam_model_lin)
+sink()
+cat("\\end{verbatim}", file = out_file_name, append = TRUE)
 
 
-# Allow for nonlinearity.
+# Allow for nonlinearity using the full model.
 var_list <- c('s(Width)', 's(Diameter)', 's(Density)',
               'Sealed', 'Machined', 'made_in_USA',
               'made_in_USA*Sealed')
@@ -695,20 +706,19 @@ gam_fmla <- as.formula(sprintf('%s ~ %s',
                                target_var,
                                paste(var_list, collapse = ' + ')))
 
-gam_model_2 <- gam(gam_fmla, data = flyreels)
-print(summary(gam_model_2))
+gam_model_full <- gam(gam_fmla, data = flyreels)
+print(summary(gam_model_full))
 
 
 
 # Print the output to a LaTeX file.
-# Since texreg does not work for GAMs,
-# I just printed the output in verbatim mode.
-
-
-# tab_file_name <- 'reg_GAM_1.tex'
-# out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-# cat(print(summary(gam_model_1)), file = out_file_name)
-
+tab_file_name <- 'reg_GAM_full.tex'
+out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
+cat("\\begin{verbatim}", file = out_file_name)
+sink(out_file_name, append = TRUE)
+summary(gam_model_full)
+sink()
+cat("\\end{verbatim}", file = out_file_name, append = TRUE)
 
 
 ##################################################

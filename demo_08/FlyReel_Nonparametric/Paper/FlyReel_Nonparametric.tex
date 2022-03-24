@@ -1,4 +1,5 @@
 \documentclass[11pt]{paper}
+\usepackage{fullpage}
 \usepackage{palatino}
 \usepackage{amsfonts,amsmath,amssymb}
 % \usepackage{graphicx}
@@ -39,6 +40,19 @@
 \fi
 
 \usepackage{subfig}
+
+
+
+% Fooling around with google help to get a summary to print.
+% \usepackage[T1]{fontenc} 
+% \usepackage[utf8]{inputenc}
+% 
+% \usepackage[utf8]{inputenc}
+% \usepackage[utf8x]{inputenc}
+\UseRawInputEncoding
+% This allows pdflatex to print the curly quotes in the
+% significance codes in the output of the GAM.
+
 
 \begin{document}
 
@@ -358,10 +372,54 @@ and the linear model is sufficient
 but you might recommend the full semiparametric model
 if you can justify the additional complexity.
 
+One factor to keep in mind, however,
+is that the above semiparametric models
+essentially take the nonparametric functions as known, 
+and do not account for the additional variability of
+the nonarametric parts of the model.
+The next specification estimates both linear 
+and nonlinear parts jointly. 
+
 \input{../Tables/reg_semipar}
 
 
+\pagebreak
+\section{Generalized Additive Model}
 
+\subsection{Linear Model}
+
+As an example of the output from the GAM specification, 
+I first estimated the model with no nonlinear terms, 
+which is essentially a linear regression. 
+
+\input{../Tables/reg_GAM_lin}
+
+\pagebreak
+\subsection{Semiparametric Model}
+
+
+Since the results of the full semiparametric specification,
+in Model 5 of Table \ref{tab:reg_semipar},
+were so promising, 
+I estimated the model with all three continuous variables specified as nonparametric functions. 
+The result was that 
+all the variables---both linear and nonlinear---were 
+statistically significant. 
+On the other hand, 
+the adjusted R-squared has not increased very much, 
+from 0.742 to 0.769 under this specification, 
+which may not justify the added complexity of the model.
+Perhaps more importantly, the coefficients on the 
+linear terms are very similar across models, 
+indicating that the models support similar conclusions relating to any business decision involving
+the ``Made in USA'' premium. 
+With this second model, we have even more support for those conclusions
+and are certain that the conclusions are not 
+coincidental results of the
+functional form decisions for previous models.
+
+\input{../Tables/reg_GAM_full}
+ 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
