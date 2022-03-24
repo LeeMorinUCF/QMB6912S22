@@ -838,6 +838,96 @@ texreg(l = list(lm_7,
 # with the horsepower variable a candidate for the nonparametric term.
 
 
+
+
+##################################################
+# Generalized Additive Model
+##################################################
+
+# Now consider a semiparametric model using an
+# estimation method that accounts for the joint estimation
+# of the nonparametric functions and the parameters.
+# This form of model is termed a Generalized Additive Model (GAM)
+# and can be estimated with the mgcv package.
+
+# Begin with the linear model specification.
+gam_model_lin <- gam(formula = log_saleprice ~
+                       horsepower + squared_horsepower +
+                       age +
+                       enghours +
+                       diesel + fwd + manual + johndeere + cab,
+                     data = tractor_sales)
+print(summary(gam_model_lin))
+
+# Print the output to a LaTeX file.
+# Since texreg does not work for GAMs,
+# I just printed the output in verbatim mode.
+tab_file_name <- 'reg_GAM_lin.tex'
+out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
+cat("\\begin{verbatim}", file = out_file_name)
+sink(out_file_name, append = TRUE)
+summary(gam_model_lin)
+sink()
+cat("\\end{verbatim}", file = out_file_name, append = TRUE)
+
+
+# Allow for nonlinearity using the full model.
+gam_model_full <- gam(formula = log_saleprice ~
+                        s(horsepower) +
+                        s(age) +
+                        s(enghours) +
+                        diesel + fwd + manual + johndeere + cab,
+                      data = tractor_sales)
+
+print(summary(gam_model_full))
+
+
+# Print the output to a LaTeX file.
+tab_file_name <- 'reg_GAM_full.tex'
+out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
+cat("\\begin{verbatim}", file = out_file_name)
+sink(out_file_name, append = TRUE)
+summary(gam_model_full)
+sink()
+cat("\\end{verbatim}", file = out_file_name, append = TRUE)
+
+
+# Allow for nonlinearity in the horsepower variable.
+gam_model_hp <- gam(formula = log_saleprice ~
+                      s(horsepower) +
+                      age +
+                      # s(age) +
+                      enghours +
+                      # s(enghours) +
+                      diesel + fwd + manual + johndeere + cab,
+                    data = tractor_sales)
+
+print(summary(gam_model_hp))
+
+
+# Print the output to a LaTeX file.
+tab_file_name <- 'reg_GAM_hp.tex'
+out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
+cat("\\begin{verbatim}", file = out_file_name)
+sink(out_file_name, append = TRUE)
+summary(gam_model_hp)
+sink()
+cat("\\end{verbatim}", file = out_file_name, append = TRUE)
+
+
+
+
+# Print the output to a LaTeX file.
+tab_file_name <- 'reg_GAM_full.tex'
+out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
+cat("\\begin{verbatim}", file = out_file_name)
+sink(out_file_name, append = TRUE)
+summary(gam_model_full)
+sink()
+cat("\\end{verbatim}", file = out_file_name, append = TRUE)
+
+
+
 ##################################################
 # End
 ##################################################

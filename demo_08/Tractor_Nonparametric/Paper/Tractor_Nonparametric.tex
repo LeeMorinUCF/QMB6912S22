@@ -40,6 +40,11 @@
 
 \usepackage{subfig}
 
+
+% This allows pdflatex to print the curly quotes in the
+% significance codes in the output of the GAM.
+\UseRawInputEncoding
+
 \begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -448,6 +453,61 @@ All things considered, these are excellent models
 and the linear model is sufficient.
 
 \input{../Tables/reg_semipar}
+
+
+
+
+
+\pagebreak
+\section{Generalized Additive Model}
+
+\subsection{Linear Model}
+
+As an example of the output from the GAM specification, 
+I first estimated the model with no nonlinear terms, 
+which is essentially a linear regression. 
+
+\input{../Tables/reg_GAM_lin}
+
+\pagebreak
+\subsection{Semiparametric Model}
+
+
+Further investigating the results of the full semiparametric specification
+in Model 5 of Table \ref{tab:reg_semipar},
+I estimated the model with all three continuous variables specified as nonparametric functions. 
+The result was that 
+almost all the variables---both linear and nonlinear---were 
+statistically significant. 
+The only exception was a loss in significance of the diesel indicator. 
+
+
+\input{../Tables/reg_GAM_full}
+
+On the other hand, 
+the adjusted R-squared has not increased very much, 
+from 0.799 to 0.819 under this specification, 
+which may not justify the added complexity of the model.
+Perhaps more importantly, the coefficients on the 
+linear terms are very similar across models, 
+indicating that the models support similar conclusions relating to any business decision involving
+the John Deere premium. 
+With this second model, we have even more support for those conclusions
+and are certain that the conclusions are not 
+coincidental results of the
+functional form decisions for previous models.
+
+
+Perhaps as a middle ground, we can estimate a model with a 
+nonparametric specification for the horsepower variable alone, 
+since it seems to have a nonlinear relationship with value in either case. 
+This retains most of the predictive value of the maximally 
+semiparametric model and accommodates the 
+nonlinear relationship with value of horsepower. 
+
+\input{../Tables/reg_GAM_hp}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
