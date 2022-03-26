@@ -2,7 +2,7 @@
 #
 # QMB 6912 Capstone Project in Business Analytics
 #
-# Examples of Nonlinear Model Specfication
+# Examples of Nonlinear Model Specification
 #
 # Lealand Morin, Ph.D.
 # Assistant Professor
@@ -103,9 +103,11 @@ tractor_sales[, 'squared_horsepower'] <- tractor_sales[, 'horsepower']^2
 
 # Estimate a regression model.
 lm_7 <- lm(data = tractor_sales,
-                 formula = log_saleprice ~ horsepower + squared_horsepower +
-                   age + enghours +
-                   diesel + fwd + manual + johndeere + cab)
+           formula = log_saleprice ~
+             horsepower + squared_horsepower +
+             age +
+             enghours +
+             diesel + fwd + manual + johndeere + cab)
 
 # Output the results to screen.
 print(summary(lm_7))
@@ -123,7 +125,7 @@ texreg(l = list(lm_7),
 
 ##################################################
 # Linear Regression Model
-# Frish-Waugh-Lovell regressions to partial out
+# Frisch-Waugh-Lovell regressions to partial out
 # other variables
 ##################################################
 
@@ -209,7 +211,7 @@ texreg(l = list(lm_7,
 
 
 ##################################################
-# Univariate kernel estimation
+# Bivariate kernel estimation
 ##################################################
 
 # You have used nonparametric methods to plot a density
@@ -553,7 +555,7 @@ dev.off()
 # Nonparametric model for engine hours
 #--------------------------------------------------
 
-# First, fit Frish-Waugh-Lovell regressions
+# First, fit Frisch-Waugh-Lovell regressions
 # to partial out other variables
 # Consider the model without the engine hours variable.
 

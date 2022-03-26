@@ -159,7 +159,7 @@ texreg(l = list(lm_6),
 
 ##################################################
 # Linear Regression Model
-# Frish-Waugh-Lovell regressions to partial out
+# Frisch-Waugh-Lovell regressions to partial out
 # other variables
 ##################################################
 
