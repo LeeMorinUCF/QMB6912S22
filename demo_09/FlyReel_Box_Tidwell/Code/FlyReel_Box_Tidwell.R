@@ -112,6 +112,23 @@ flyreels[, 'Density'] <- flyreels[, 'Weight'] / flyreels[, 'Volume']
 # Create logarithm of dependent variable.
 flyreels[, 'log_Price'] <- log(flyreels[, 'Price'])
 
+# Generate new dependent variable with results from Problem Set 6.
+# First define the Box-Cox transformation.
+Lambda_Price <- function(price, lambda) {
+
+  if (lambda == 0) {
+    return(log(price))
+  } else {
+    return((price^lambda - 1)/lambda)
+  }
+
+}
+
+# Recall the optimal exponent from the MLE.
+lambda_hat <- 0.43
+flyreels[, 'Trans_Price'] <- Lambda_Price(price = flyreels[, 'Price'],
+                                          lambda = lambda_hat)
+
 
 # Replace Country Indicator with made_in_USA Indicator.
 table(flyreels[, 'Country'], useNA = 'ifany')
@@ -248,13 +265,13 @@ lm_density <- lm(data = flyreels, formula = lm_fmla)
 flyreels[, 'density_resid'] <- lm_density$residuals
 
 
-
 ##################################################
 # Verify FWL Transformations for Regression Models
 ##################################################
 
-# This section is unnecessary but I include it to check that
-# the FWL regressions were performed correctly.
+# This section is unnecessary but I include it
+# to compare nonlinear specifications against
+# linear specifications.
 
 #--------------------------------------------------
 # FWL regression model for Width
@@ -321,15 +338,6 @@ print(summary(lm_density_fwl))
 
 
 
-# Note that the coefficients on the variables
-# are the same as those from the original regression.
-print(summary(lm_6))
-
-
-
-
-
-
 ##################################################
 # Nonparametric Regression Models
 ##################################################
@@ -337,27 +345,6 @@ print(summary(lm_6))
 #--------------------------------------------------
 # Nonparametric model for Width
 #--------------------------------------------------
-
-# Plot a scattergraph in terms of the original variable.
-
-fig_file_name <- 'dev_vs_width.pdf'
-out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-pdf(out_file_name)
-
-plot(flyreels[, 'Width'],
-     flyreels[, 'log_Price_resid_width'],
-     main = 'Linear Model for Fly Reel Prices',
-     xlab = 'Width',
-     ylab = 'Deviation of Log Fly Reel Prices',
-     col = 'blue')
-
-# Add a line for the linear prediction from above.
-points(flyreels[, 'Width'],
-       predict(lm_width_fwl),
-       lwd = 3, col = 'red')
-
-dev.off()
-
 
 # Estimate and plot nonparametric model for Width
 
@@ -400,28 +387,7 @@ dev.off()
 # Nonparametric model for Diameter
 #--------------------------------------------------
 
-# Plot a scattergraph in terms of the original variable.
-
-fig_file_name <- 'dev_vs_diameter.pdf'
-out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-pdf(out_file_name)
-
-plot(flyreels[, 'Diameter'],
-     flyreels[, 'log_Price_resid_diameter'],
-     main = 'Linear Model for Fly Reel Prices',
-     xlab = 'Diameter',
-     ylab = 'Deviation of Log Fly Reel Prices',
-     col = 'blue')
-
-# Add a line for the linear prediction from above.
-points(flyreels[, 'Diameter'],
-       predict(lm_diameter_fwl),
-       lwd = 3, col = 'red')
-
-dev.off()
-
-
-# Estimate and plot nonparametric model for Width
+# Estimate and plot nonparametric model for Diameter
 
 np_diameter_fit_1 <- loess(log_Price_resid_diameter ~ diameter_resid,
                         flyreels,
@@ -463,28 +429,7 @@ dev.off()
 # Nonparametric model for Density
 #--------------------------------------------------
 
-# Plot a scattergraph in terms of the original variable.
-
-fig_file_name <- 'dev_vs_density.pdf'
-out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-pdf(out_file_name)
-
-plot(flyreels[, 'Density'],
-     flyreels[, 'log_Price_resid_density'],
-     main = 'Linear Model for Fly Reel Prices',
-     xlab = 'Density',
-     ylab = 'Deviation of Log Fly Reel Prices',
-     col = 'blue')
-
-# Add a line for the linear prediction from above.
-points(flyreels[, 'Density'],
-       predict(lm_density_fwl),
-       lwd = 3, col = 'red')
-
-dev.off()
-
-
-# Estimate and plot nonparametric model for Width
+# Estimate and plot nonparametric model for Density
 
 np_density_fit_1 <- loess(log_Price_resid_density ~ density_resid,
                         flyreels,
@@ -736,24 +681,38 @@ cat("\\end{verbatim}", file = out_file_name, append = TRUE)
 ##################################################
 
 
-# Model specification.
-# var_list <- c('Width', 'Diameter', 'Density',
-#               'Sealed', 'Machined', 'made_in_USA')
-# var_list <- c('Width', 'Diameter', 'Density', 'Brand',
-#               'Sealed', 'Machined', 'made_in_USA')
-# var_list <- c('Density', 'Diameter')
-# var_list <- c('Diameter')
-# var_list <- c('Density')
-bt_fmla <- as.formula(sprintf('Trans_Price ~ %s',
-                              paste(var_list, collapse = ' + ')))
-var_list <- c('Brand',
-              'Sealed', 'Machined', 'made_in_USA')
-bt_other <- as.formula(sprintf(' ~  %s',
-                               paste(var_list, collapse = ' + ')))
+# Begin with the linear model specification.
+
+
+
+# Model with all the continuous variables
+# available for transformation.
+# target_var <- 'Trans_Price'
+target_var <- 'log_Price'
+bt_var_list <- c('Width', 'Diameter', 'Density')
+
+summary(flyreels[, c(target_var, bt_var_list)])
+
+bt_fmla <- as.formula(sprintf('%s ~ %s',
+                               target_var,
+                               paste(bt_var_list, collapse = ' + ')))
+
+# Categorical variables are not suited to the Box-Tidwell
+# transformation, unless they are numeric with ordinal relationship..
+# other_var_list <- c('Sealed', 'Machined', 'made_in_USA',
+#                     'made_in_USA*Sealed')
+other_var_list <- c('Sealed', 'Machined', 'made_in_USA')
+
+summary(flyreels[, c(other_var_list[1:3])])
+
+bt_other_fmla <- as.formula(sprintf(' ~  %s',
+                               paste(other_var_list, collapse = ' + ')))
 
 # box.tidwell() is deprecated, replaced with boxTidwell().
 # bt_model_1 <- box.tidwell(formula = bt_fmla, other.x = bt_other, data = flyreels)
-bt_model_1 <- boxTidwell(formula = bt_fmla, other.x = bt_other, data = flyreels)
+bt_model_1 <- boxTidwell(formula = bt_fmla,
+                         other.x = bt_other_fmla,
+                         data = flyreels)
 print(bt_model_1)
 
 

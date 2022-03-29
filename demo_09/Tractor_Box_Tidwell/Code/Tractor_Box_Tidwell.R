@@ -205,20 +205,6 @@ print(summary(lm_hp_quad_fwl))
 print(summary(lm_7))
 
 
-# Print the output to a LaTeX file.
-tab_file_name <- 'reg_sq_horse_fwl.tex'
-out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-texreg(l = list(lm_7,
-                lm_no_hp,
-                lm_hp,
-                lm_hp_2,
-                lm_hp_quad_fwl),
-       digits = 5,
-       file = out_file_name,
-       label = 'tab:reg_sq_horse_fwl',
-       caption = "Quadratic Model for Tractor Prices: FWL Regressions")
-
-
 ##################################################
 # Bivariate kernel estimation
 ##################################################
@@ -229,52 +215,6 @@ texreg(l = list(lm_7,
 # with the others.
 # We will use the above transformations of the variables
 # into residuals from regressions on the other variables.
-
-#--------------------------------------------------
-# Plot parametric model for horsepower
-#--------------------------------------------------
-
-
-# Plot a scattergraph to focus on horsepower.
-
-fig_file_name <- 'dev_vs_horse.pdf'
-out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-pdf(out_file_name)
-
-plot(tractor_sales[, 'horsepower'],
-     tractor_sales[, 'log_saleprice_resid_hp'],
-     main = 'Quadratic Model for Tractor Prices',
-     xlab = 'Horsepower',
-     ylab = 'Deviation of Log Tractor Prices',
-     col = 'blue')
-
-# Add a line for the quadratic prediction from above.
-points(tractor_sales[, 'horsepower'],
-      predict(lm_hp_quad_fwl),
-      lwd = 3, col = 'red')
-
-dev.off()
-
-
-# Plot a scattergraph to focus on excess horsepower.
-
-fig_file_name <- 'dev_vs_horse_dev.pdf'
-out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-pdf(out_file_name)
-
-plot(tractor_sales[, 'horsepower_resid'],
-     tractor_sales[, 'log_saleprice_resid_hp'],
-     main = 'Nonparametric Model for Tractor Prices',
-     xlab = 'Deviation of Horsepower',
-     ylab = 'Deviation of Log Tractor Prices',
-     col = 'blue')
-
-# Add a line for the quadratic prediction from above.
-points(tractor_sales[, 'horsepower_resid'],
-      predict(lm_hp_quad_fwl),
-      lwd = 3, col = 'red')
-
-dev.off()
 
 
 #--------------------------------------------------
@@ -321,70 +261,15 @@ dev.off()
 # is close enough.
 
 
-#--------------------------------------------------
-# Alternate models with different degrees of smoothing
-#--------------------------------------------------
+# Store the prediction from the nonparametric model.
 
-# When we estimated probability densities,
-# we adjusted the bandwidth parameter to fit
-# with different degrees of smoothness.
-# The loess method has a span parameter for this function.
-# The default smoother span (bandwidth parameter) is 0.75.
+# Normally, you might estimate a set of models
+# with several bandwidth settings.
+# Then choose a nonparametric model
+# that captures what is happening and don't need to show
+# all of the curves that you fit during your investigation.
 
-np_hp_fit_2 <- loess(log_saleprice_resid_hp ~ horsepower_resid,
-                     tractor_sales, span = 2.0)
-
-# Rebuild the previous plot to compare this estimate.
-fig_file_name <- 'dev_np_vs_horse_dev_bw.pdf'
-out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-pdf(out_file_name)
-
-plot(tractor_sales[, 'horsepower_resid'],
-     tractor_sales[, 'log_saleprice_resid_hp'],
-     main = 'Nonparametric Model for Tractor Prices',
-     xlab = 'Deviation of Horsepower',
-     ylab = 'Deviation of Log Tractor Prices',
-     col = 'blue')
-
-# Add a line for the quadratic prediction from above.
-points(tractor_sales[, 'horsepower_resid'],
-       predict(lm_hp_quad_fwl),
-       lwd = 3, col = 'red')
-
-# Add a line for the quadratic prediction from above.
-points(tractor_sales[, 'horsepower_resid'],
-       np_hp_fit_1$fitted,
-       lwd = 3, col = 'green')
-
-
-# Add a plot of the smoother curve to the scattergraph.
-points(tractor_sales[, 'horsepower_resid'],
-       np_hp_fit_2$fitted,
-       lwd = 2, col = 'orange')
-# You can see some flattening with this
-# more flexible estimator.
-
-
-# Try again with less smoothing.
-np_hp_fit_3 <- loess(log_saleprice_resid_hp ~ horsepower_resid,
-                     tractor_sales, span = 0.1)
-
-
-# Add a plot of this curve to the scattergraph.
-points(tractor_sales[, 'horsepower_resid'],
-       np_hp_fit_3$fitted,
-       lwd = 2, col = 'magenta')
-# Much more rough but you capture the decline
-# in value for tractors with high horsepower.
-
-dev.off()
-
-
-# Ultimately, you would choose one that captures what
-# is happening and don't need to show all of the curves
-# that you fit during your investigation.
-
-# In this case, we will keep the first fit.
+# In this case, we will keep the defaut fit.
 tractor_sales[, 'horsepower_np'] <- np_hp_fit_1$fitted
 
 
@@ -457,65 +342,6 @@ print(summary(lm_age_fwl))
 # is the same as those from the original regression.
 print(summary(lm_7))
 
-
-# Print the output to a LaTeX file.
-tab_file_name <- 'reg_age_fwl.tex'
-out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-texreg(l = list(lm_7,
-                lm_no_age,
-                lm_age,
-                lm_age_fwl),
-       digits = 5,
-       file = out_file_name,
-       label = 'tab:reg_age_fwl',
-       caption = "Linear Model for Age: FWL Regressions")
-
-
-
-# Plot a scattergraph to focus on age.
-
-fig_file_name <- 'dev_vs_age.pdf'
-out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-pdf(out_file_name)
-
-plot(tractor_sales[, 'age'],
-     tractor_sales[, 'log_saleprice_resid_age'],
-     main = 'Quadratic Model for Tractor Prices',
-     xlab = 'Age',
-     ylab = 'Deviation of Log Tractor Prices',
-     col = 'blue')
-
-# Add a line for the linear prediction from above.
-points(tractor_sales[, 'age'],
-       predict(lm_age_fwl),
-       lwd = 3, col = 'red')
-
-dev.off()
-
-
-# Plot a scattergraph to focus on excess age.
-
-fig_file_name <- 'dev_vs_age_dev.pdf'
-out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-pdf(out_file_name)
-
-plot(tractor_sales[, 'age_resid'],
-     tractor_sales[, 'log_saleprice_resid_age'],
-     main = 'Nonparametric Model for Tractor Prices',
-     xlab = 'Deviation of Age',
-     ylab = 'Deviation of Log Tractor Prices',
-     col = 'blue')
-
-# Add a line for the quadratic prediction from above.
-points(tractor_sales[, 'age_resid'],
-       predict(lm_age_fwl),
-       lwd = 3, col = 'red')
-
-dev.off()
-
-# Notice that this is a straight line,
-# since we have a single variable with no
-# quadratic transformation.
 
 #--------------------------------------------------
 # Estimate and plot Nonparametric model for age
@@ -625,43 +451,6 @@ print(summary(lm_eng_fwl))
 print(summary(lm_7))
 
 
-# Print the output to a LaTeX file.
-tab_file_name <- 'reg_eng_fwl.tex'
-out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-texreg(l = list(lm_7,
-                lm_no_eng,
-                lm_eng,
-                lm_eng_fwl),
-       digits = 5,
-       file = out_file_name,
-       label = 'tab:reg_eng_fwl',
-       caption = "Linear Model for Engine Hours: FWL Regressions")
-
-
-
-# Plot a scattergraph to focus on eng.
-
-fig_file_name <- 'dev_vs_eng.pdf'
-out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-pdf(out_file_name)
-
-plot(tractor_sales[, 'enghours'],
-     tractor_sales[, 'log_saleprice_resid_eng'],
-     main = 'Quadratic Model for Tractor Prices',
-     xlab = 'Engine Hours',
-     ylab = 'Deviation of Log Tractor Prices',
-     col = 'blue')
-
-# Add a line for the linear prediction from above.
-points(tractor_sales[, 'enghours'],
-       predict(lm_eng_fwl),
-       lwd = 3, col = 'red')
-
-dev.off()
-
-# Skip the linear model and go straight to the
-# nonparametric model.
-
 #--------------------------------------------------
 # Estimate and plot Nonparametric model for engine hours
 #--------------------------------------------------
@@ -701,19 +490,12 @@ points(tractor_sales[, 'eng_resid'],
 dev.off()
 
 
-
-
-
-
 # As with age, it looks as though linear might also be close enough.
 
 
 ##################################################
 # Semiparametric Models
 ##################################################
-
-
-
 
 
 #--------------------------------------------------

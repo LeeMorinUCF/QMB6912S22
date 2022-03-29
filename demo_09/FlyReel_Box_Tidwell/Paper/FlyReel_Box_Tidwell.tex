@@ -164,7 +164,8 @@ Table \ref{tab:reg_sealed_USA}.
 \input{../Tables/reg_sealed_USA}
 % 
 Next, I will attempt to improve on this specification
-by investigating the potential for nonlinear functional forms. 
+by investigating the potential for nonlinear functional forms, 
+as we did for Problem Set \#8. 
 
 
 
@@ -181,42 +182,25 @@ by investigating the potential for nonlinear functional forms.
 % \clearpage
 \subsection{Nonparametric Specification for Width}
 
-As above, I first conduct FWL regressions 
+As above, I first conducted FWL regressions 
 to reduce the problem to two dimensions. 
 The results are not shown here, 
 since the comparison only verifies 
 the conclusion of the FWL theorem. 
 
 To illustrate the fit of the linear model, 
-Figure \ref{fig:dev_vs_width} shows a scatter plot 
+Figure \ref{fig:dev_np_vs_width_dev} 
+shows a scatter plot 
 of the residual log prices on 
-the width of fly reels. 
-The observations are shown in blue
-and the fitted values are shown in red.
-The variation in the fitted values results from the 
-fact that it is not plotted against the transformed 
-excess width variable 
-used in the regressions.
-Still, the linear pattern is apparent
-and appears to match the data. 
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale = 0.5, keepaspectratio=true]{../Figures/dev_vs_diameter}
-  \caption{Linear Model for Fly Reel Prices vs. Width} \label{fig:dev_vs_width}
-\end{figure}
-
-
-
-\pagebreak
-As a comparison, Figure \ref{fig:dev_np_vs_width_dev} 
-augments the above by showing the plot against the 
 residuals from the regression for 
 width:
 the ``excess width'' of a fly reel 
 compared to what would be 
 expected given the other characteristics of the fly reel. 
-The fit follows a straight line, as specified in the model. 
+The observations are shown in blue
+and the fitted values from the linear model are shown in red.
+The fit follows a straight line, as expected for a linear model. 
+
 % 
 I move directly to the nonparametric specification for 
 the relationship between prices and 
@@ -241,35 +225,18 @@ is also a close enough approximation.
 \subsection{Nonparametric Specification for Diameter}
 
 To illustrate the fit of the linear model, 
-Figure \ref{fig:dev_vs_diameter} shows a scatter plot 
+Figure \ref{fig:dev_np_vs_diameter_dev} 
+shows a scatter plot 
 of the residual log prices on 
-the diameter of fly reels. 
-The observations are shown in blue
-and the fitted values are shown in red.
-The variation in the fitted values results from the 
-fact that it is not plotted against the transformed 
-excess diameter variable 
-used in the regressions.
-Still, the linear pattern is apparent
-and appears to match the data. 
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale = 0.5, keepaspectratio=true]{../Figures/dev_vs_diameter}
-  \caption{Linear Model for Fly Reel Prices vs. Diameter} \label{fig:dev_vs_diameter}
-\end{figure}
-
-
-
-\pagebreak
-As a comparison, Figure \ref{fig:dev_np_vs_diameter_dev} 
-augments the above by showing the plot against the 
 residuals from the regression for 
 diameter:
 the ``excess diameter'' of a fly reel 
 compared to what would be 
 expected given the other characteristics of the fly reel. 
-The fit follows a straight line, as specified in the model. 
+The observations are shown in blue
+and the fitted values from the linear model are shown in red.
+The fit follows a straight line, as expected for a linear model. 
+
 % 
 I move directly to the nonparametric specification for 
 the relationship between prices and 
@@ -295,35 +262,18 @@ is also a close enough approximation.
 \subsection{Nonparametric Specification for Density}
 
 To illustrate the fit of the linear model, 
-Figure \ref{fig:dev_vs_density} shows a scatter plot 
+Figure \ref{fig:dev_np_vs_density_dev} 
+shows a scatter plot 
 of the residual log prices on 
-the density of fly reels. 
-The observations are shown in blue
-and the fitted values are shown in red.
-The variation in the fitted values results from the 
-fact that it is not plotted against the transformed 
-excess density variable 
-used in the regressions.
-Still, the linear pattern is apparent
-and appears to match the data. 
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[scale = 0.5, keepaspectratio=true]{../Figures/dev_vs_density}
-  \caption{Linear Model for Fly Reel Prices vs. Density} \label{fig:dev_vs_density}
-\end{figure}
-
-
-
-\pagebreak
-As a comparison, Figure \ref{fig:dev_np_vs_density_dev} 
-augments the above by showing the plot against the 
 residuals from the regression for 
 density:
 the ``excess density'' of a fly reel 
 compared to what would be 
 expected given the other characteristics of the fly reel. 
-The fit follows a straight line, as specified in the model. 
+The observations are shown in blue
+and the fitted values are shown in red.
+The fit follows a straight line, as expected for a linear model. 
+
 % 
 I move directly to the nonparametric specification for 
 the relationship between prices and 
@@ -349,7 +299,7 @@ is also a close enough approximation.
 \section{Semiparametric Estimates}
 
 As I was building the above nonparametric models, 
-I stored the predictions and will now use them as variables in 
+I stored the predictions and will used them as variables in 
 linear models. 
 Table \ref{tab:reg_semipar} 
 shows the estimates from a set of models. 
@@ -422,6 +372,14 @@ functional form decisions for previous models.
 
 \input{../Tables/reg_GAM_full}
  
+
+\pagebreak
+\section{The Box-Tidwell Transformation}
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
