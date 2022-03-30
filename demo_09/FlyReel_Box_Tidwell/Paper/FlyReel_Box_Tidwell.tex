@@ -373,8 +373,76 @@ functional form decisions for previous models.
 \input{../Tables/reg_GAM_full}
  
 
+
+
 \pagebreak
-\section{The Box-Tidwell Transformation}
+\section{The Box--Tidwell Transformation}
+
+The Box--Tidwell function tests for non-linear relationships
+to the mean of the dependent variable.
+The nonlinearity is in the form of an
+exponential transformation in the form of the Box-Cox
+transformation, except that the transformation is taken
+on the explanatory variables.
+
+
+\subsection{Transformation of Width}
+
+
+Performing the transformation on the 
+width variable
+produces a modified form of the linear model.
+This specification allows a single exponential
+transformation on 
+width, 
+rather than a linear form.
+
+\input{../Tables/bt_width}
+
+The \textsf{R} output is the statistics for a test of nonlinearity:
+that the exponent $\lambda$ in the Box--Tidwell transformation is zero.
+%
+The "\texttt{MLE of lambda}" statistic is the optimal exponent on horsepower.
+Similar to the Box-Cox transformation,
+with Box-Tidwell, the exponents are on the explanatory variables
+and are all called lambda, in contrast
+to the parameter $\tau$ in our class notes.
+%  
+The exponent is not significantly different from one. 
+This supports a linear form for Width,
+confirming our result from the nonparametric analysis.
+
+
+
+\subsection{Transformation of Diameter}
+
+
+\input{../Tables/bt_diameter}
+
+
+This is very weak evidence for
+an inverse square root transformation
+for diameter but it is not estimated accurately.
+%
+There is no evidence for a transformation 
+with a coefficient different from 1, 
+which suggests
+a purely linear relationship between \texttt{log\_Price}
+and 
+diameter.
+Next, I will consider the possibility of nonlinearity 
+in the value of the density of a reel. 
+
+\subsection{Transformation of Density}
+
+
+\input{../Tables/bt_density}
+
+Similar to Diameter, this is very weak evidence for
+a square root transformation
+for diameter but it is not estimated accurately.
+%
+Conclude that the linear model is the best choice.
 
 
 

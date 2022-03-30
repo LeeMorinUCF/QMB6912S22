@@ -680,40 +680,175 @@ cat("\\end{verbatim}", file = out_file_name, append = TRUE)
 # Box-Tidwell Transformation
 ##################################################
 
-
-# Begin with the linear model specification.
-
-
-
-# Model with all the continuous variables
+# Model with each of the continuous variables
 # available for transformation.
-# target_var <- 'Trans_Price'
-target_var <- 'log_Price'
-bt_var_list <- c('Width', 'Diameter', 'Density')
-
-summary(flyreels[, c(target_var, bt_var_list)])
-
-bt_fmla <- as.formula(sprintf('%s ~ %s',
-                               target_var,
-                               paste(bt_var_list, collapse = ' + ')))
 
 # Categorical variables are not suited to the Box-Tidwell
 # transformation, unless they are numeric with ordinal relationship..
-# other_var_list <- c('Sealed', 'Machined', 'made_in_USA',
-#                     'made_in_USA*Sealed')
-other_var_list <- c('Sealed', 'Machined', 'made_in_USA')
 
-summary(flyreels[, c(other_var_list[1:3])])
+# Note that the box.tidwell() function is deprecated,
+# it was replaced with boxTidwell().
 
-bt_other_fmla <- as.formula(sprintf(' ~  %s',
-                               paste(other_var_list, collapse = ' + ')))
 
-# box.tidwell() is deprecated, replaced with boxTidwell().
-# bt_model_1 <- box.tidwell(formula = bt_fmla, other.x = bt_other, data = flyreels)
-bt_model_1 <- boxTidwell(formula = bt_fmla,
-                         other.x = bt_other_fmla,
+
+#--------------------------------------------------
+# Transformation of Width
+#--------------------------------------------------
+
+
+bt_width <- boxTidwell(formula =
+                         log_Price ~
+                         Width, # +
+                       # Diameter +
+                       # Density,
+                       other.x = ~
+                         # Width +
+                         Diameter +
+                         Density +
+                         Sealed +
+                         Machined +
+                         made_in_USA +
+                         made_in_USA*Sealed,
+                       max.iter = 1000,
+                       tol = 0.001,
+                       data = flyreels)
+# Error in lm.fit(cbind(1, x1.p, x2), y, ...) : NA/NaN/Inf in 'x'
+
+# This one failed, possibly because the optimization routine
+# passed through a parameter value that rendered one of the
+# density observations badly behaved.
+
+# I decided to drop one variable to get around
+# the numerical issues with the optimization.
+
+bt_width <- boxTidwell(formula =
+                         log_Price ~
+                         Width, # +
+                       # Diameter +
+                       # Density,
+                       other.x = ~
+                         # Width +
+                         # Diameter +
+                         Density +
+                         Sealed +
+                         Machined +
+                         made_in_USA +
+                         made_in_USA*Sealed,
+                       max.iter = 100,
+                       tol = 0.001,
+                       data = flyreels)
+
+# The output is a test on the exponent.
+print(bt_width)
+# MLE of lambda Score Statistic (z) Pr(>|z|)
+#        1.1615              0.1587   0.8739
+#
+# iterations =  5
+
+
+# The exponent parameter is not
+# statistically different from one.
+# This supports a linear form for Width,
+# confirming our result from the nonparametric analysis.
+
+# Print the output to a LaTeX file.
+tab_file_name <- 'bt_width.tex'
+out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
+cat("\\begin{verbatim}", file = out_file_name)
+sink(out_file_name, append = TRUE)
+print(bt_width)
+sink()
+cat("\\end{verbatim}", file = out_file_name, append = TRUE)
+
+
+#--------------------------------------------------
+# Transformation of Width
+#--------------------------------------------------
+
+
+bt_diameter <- boxTidwell(formula =
+                            log_Price ~
+                            # Width +
+                            Diameter, # +
+                          # Density,
+                          other.x = ~
+                            Width +
+                            # Diameter +
+                            Density +
+                            Sealed +
+                            Machined +
+                            made_in_USA +
+                            made_in_USA*Sealed,
+                          max.iter = 100,
+                          tol = 0.001,
+                          data = flyreels)
+
+# The output is a test on the exponent.
+print(bt_diameter)
+# MLE of lambda Score Statistic (z) Pr(>|z|)
+#      -0.35213             -1.2106    0.226
+#
+# iterations =  4
+
+# This is very weak evidence for
+# an inverse square root transformation
+# for diameter but it is not estimated accurately.
+
+# Print the output to a LaTeX file.
+tab_file_name <- 'bt_diameter.tex'
+out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
+cat("\\begin{verbatim}", file = out_file_name)
+sink(out_file_name, append = TRUE)
+print(bt_diameter)
+sink()
+cat("\\end{verbatim}", file = out_file_name, append = TRUE)
+
+
+#--------------------------------------------------
+# Transformation of Density
+#--------------------------------------------------
+
+
+bt_density <- boxTidwell(formula =
+                           log_Price ~
+                           # Width +
+                           # Diameter +
+                           Density,
+                         other.x = ~
+                           Width +
+                           Diameter +
+                           # Density +
+                           Sealed +
+                           Machined +
+                           made_in_USA +
+                           made_in_USA*Sealed,
+                         max.iter = 100,
+                         tol = 0.001,
                          data = flyreels)
-print(bt_model_1)
+
+print(bt_density)
+# MLE of lambda Score Statistic (z) Pr(>|z|)
+#       0.19315             -1.3448   0.1787
+#
+# iterations =  10
+
+# Similar to Diameter, this is very weak evidence for
+# a square root transformation
+# for diameter but it is not estimated accurately.
+
+# Print the output to a LaTeX file.
+tab_file_name <- 'bt_density.tex'
+out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
+cat("\\begin{verbatim}", file = out_file_name)
+sink(out_file_name, append = TRUE)
+print(bt_density)
+sink()
+cat("\\end{verbatim}", file = out_file_name, append = TRUE)
+
+
+
+# Conclude that the linear model is the best choice.
+
 
 
 
