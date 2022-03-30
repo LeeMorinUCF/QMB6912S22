@@ -381,6 +381,113 @@ nonlinear relationship with value of horsepower.
 \input{../Tables/reg_GAM_hp}
 
 
+\pagebreak
+\section{The Box--Tidwell Transformation}
+
+The Box--Tidwell function tests for non-linear relationships
+to the mean of the dependent variable.
+The nonlinearity is in the form of an
+exponential transformation in the form of the Box-Cox
+transformation, except that the transformation is taken
+on the explanatory variables.
+
+
+\subsection{Transformation of Horsepower}
+
+
+Performing the transformation on the horsepower variable
+produces a modified from the linear model.
+This specification allows a single exponential
+transformation on horsepower, rather than a quadratic form.
+
+\input{../Tables/bt_hp}
+
+The \textsf{R} output is the statistics for a test of nonlinearity:
+that the exponent $\lambda$ in the Box--Tidwell transformation is zero.
+%
+The "\texttt{MLE of lambda}" statistic is the optimal exponent on horsepower.
+Similar to the Box-Cox transformation,
+with Box-Tidwell, the exponents are on the explanatory variables
+and are all called lambda, in contrast
+to the parameter $\tau$ in our class notes.
+The exponent is significantly different from 0,
+although it is a small positive value,
+which suggests an increasing relationship
+for the value of horsepower
+with a slope that is sharply declining.
+Next I consider the possibility of a changing relationship 
+for the next continuous variable. 
+
+
+\subsection{Transformation of Age}
+
+
+\input{../Tables/bt_age}
+
+This coefficient is effectively 1, which is more evidence of
+a purely linear relationship between \texttt{log\_saleprice}
+and age: the percentage depreciation rate is constant.
+Next, I will consider the possibility of nonlinearity 
+in depreciation from hours of use. 
+
+\subsection{Transformation of Engine Hours}
+
+
+\input{../Tables/bt_eng}
+
+Although $\hat{\lambda}$ is not statistically significant,
+this suggests a moderately increasing relationship
+between the log of tractor prices and engine hours,
+which means that tractors with high hours of use
+depreciate more quickly with each additional hour of use.
+
+Since a nonlinear relationship was detected with horsepower,
+I will next estimate a model
+with nonlinearity in all three continuous variables.
+
+
+\subsection{Transformation of All Three Continuous Variables}
+
+
+\input{../Tables/bt_full}
+
+
+The performance is similar to the other models with
+forms of nonlinearity for the value of horsepower.
+Now consider the full set of such models in a table for a final comparison.
+
+
+\pagebreak
+\section{Final Comparison of Candidate Models}
+
+I created one more variable \texttt{horsepower\_bt}
+by raising horsepower to the optimal exponent 
+$\hat{\lambda} = 0.1143693$. 
+Then, I included this variable in the place of 
+the horsepower variables a the linear regression model.
+% 
+Table \ref{tab:reg_sq_horse_sp_bt} collects the results
+of the set of models from the three forms of nonlinearity.
+Model 1 is the linear regression model with 
+a quadratic form for horsepower. 
+Model 2 is the semiparametric model with
+a nonparametric form for horsepower. 
+Model 3 has the same specification as the other two, 
+except that the horsepower variable is transformed using the optimal
+exponent for the Box-Tidwell transformation. 
+% 
+The last model has the highest R-squared
+among the ones we have estimated.
+Again, the differences are marginal, so the practical recommendation
+is the model with the quadratic relationship for horsepower, 
+which has a simpler interpretation.
+In either case, we conclude that John Deere tractors are worth
+approximately thirty percent more valuable
+than an equivalent tractor of another brand. 
+
+\input{../Tables/reg_sq_horse_sp_bt}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
