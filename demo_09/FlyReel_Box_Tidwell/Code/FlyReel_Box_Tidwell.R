@@ -711,6 +711,7 @@ bt_width <- boxTidwell(formula =
                          made_in_USA*Sealed,
                        max.iter = 1000,
                        tol = 0.001,
+                       verbose = TRUE,
                        data = flyreels)
 # Error in lm.fit(cbind(1, x1.p, x2), y, ...) : NA/NaN/Inf in 'x'
 
@@ -781,6 +782,7 @@ bt_diameter <- boxTidwell(formula =
                             made_in_USA*Sealed,
                           max.iter = 100,
                           tol = 0.001,
+                          verbose = TRUE,
                           data = flyreels)
 
 # The output is a test on the exponent.

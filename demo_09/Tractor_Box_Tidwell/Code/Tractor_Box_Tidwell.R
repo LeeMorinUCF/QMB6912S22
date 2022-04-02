@@ -710,17 +710,6 @@ cat("\\end{verbatim}", file = out_file_name, append = TRUE)
 
 
 
-# Print the output to a LaTeX file.
-tab_file_name <- 'reg_GAM_full.tex'
-out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-cat("\\begin{verbatim}", file = out_file_name)
-sink(out_file_name, append = TRUE)
-summary(gam_model_full)
-sink()
-cat("\\end{verbatim}", file = out_file_name, append = TRUE)
-
-
-
 ##################################################
 # Box-Tidwell Transformation
 ##################################################
@@ -737,7 +726,7 @@ cat("\\end{verbatim}", file = out_file_name, append = TRUE)
 #--------------------------------------------------
 
 # Modified from the linear model:
-# saleprice ~ horsepower + squared_horsepower +
+# log_saleprice ~ horsepower + squared_horsepower +
 #   age + enghours +
 #   diesel + fwd + manual + johndeere + cab
 # This specification allows a single exponential
@@ -751,7 +740,8 @@ bt_hp <- boxTidwell(formula =
                        age +
                        enghours +
                        diesel + fwd + manual + johndeere + cab,
-                    data = tractor_sales)
+                    data = tractor_sales,
+                    verbose = TRUE)
 
 # The summary method is not available.
 # summary(bt_hp)
@@ -766,6 +756,18 @@ print(bt_hp)
 # although it is a small positive value,
 # which suggests an increasing but sharply declining relationship.
 
+# What does this transformation look like?
+hp_grid <- seq(15, 500, by = 5)
+bt_hp_lambda_hat <- 0.1143693
+hp_bt_grid <- hp_grid^bt_hp_lambda_hat
+
+plot(hp_grid,
+     hp_bt_grid,
+     xlab = 'Horsepower',
+     ylab = 'Transformation of Horsepower',
+     type = 'l',
+     lwd = 3,
+     col = 'blue')
 
 # Print the output to a LaTeX file.
 tab_file_name <- 'bt_hp.tex'
@@ -789,7 +791,8 @@ bt_age <- boxTidwell(formula =
                         # age +
                         enghours +
                         diesel + fwd + manual + johndeere + cab,
-                     data = tractor_sales)
+                     data = tractor_sales,
+                     verbose = TRUE)
 
 print(bt_age)
 # This coefficient is effectively 1, which is more evidence of
@@ -818,14 +821,31 @@ bt_eng <- boxTidwell(formula =
                         age +
                         # enghours +
                         diesel + fwd + manual + johndeere + cab,
-                     data = tractor_sales)
+                     data = tractor_sales,
+                     verbose = TRUE)
 
 print(bt_eng)
 # Although not statistically significant,
-# this suggests a moderately increasing relationship
+# this suggests a moderately decreasing relationship
 # between log_saleprice and engine hours,
 # which means that tractors with high hours of use
 # depreciate more quickly with each additional hour of use.
+
+
+# What does this transformation look like?
+summary(tractor_sales[, 'enghours'])
+eng_grid <- seq(1, 20001, by = 100)
+bt_eng_lambda_hat <- 1.357793
+eng_bt_grid <- eng_grid^bt_eng_lambda_hat
+
+
+plot(eng_grid,
+     eng_bt_grid,
+     xlab = 'Engine Hours',
+     ylab = 'Transformation of Engine Hours',
+     type = 'l',
+     lwd = 3,
+     col = 'blue')
 
 # Since a nonlinear relationship was detected with horsepower,
 # check with nonlinearity in all three continuous variables.
