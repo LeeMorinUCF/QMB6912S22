@@ -589,8 +589,10 @@ tobit_5_ex4[, 'yo2'] <- tobit_5_ex4[, 'xo2'] +
 # Estimate Model that Accounts for Sample Selection
 #--------------------------------------------------
 
-# Again, both equations have the same explanatory
-# variable, so the independence assumption is not satisfied.
+# This time, as in example 1, both equations
+# have different explanatory variables,
+# which are different from the selection variable,
+# so the independence assumption is satisfied.
 tobit_5_sel_4 <- selection(selection = ys ~ xs,
                            outcome = list(yo1 ~ xo1,
                                           yo2 ~ xo2),
@@ -605,6 +607,27 @@ summary(tobit_5_sel_4)
 # Estimate Model that Ignores Sample Selection
 #--------------------------------------------------
 
+# Estimate the feasible linear regression model
+# with only the variables observed.
+
+# It drops all the information about the observations
+# that were not selected for the particular model.
+
+# Model 1:
+tobit_5_lm_4_sel1 <- lm(formula = yo1 ~ xo1,
+                        data = tobit_5_ex4[tobit_5_ex4[, 'ys'], ])
+
+summary(tobit_5_lm_4_sel1)
+
+# Model 2:
+tobit_5_lm_4_sel2 <- lm(formula = yo2 ~ xo2,
+                        data = tobit_5_ex4[!tobit_5_ex4[, 'ys'], ])
+
+summary(tobit_5_lm_4_sel2)
+
+# The results are similar but the variances are larger
+# as each regression model ignores the information
+# from the other equation.
 
 
 #--------------------------------------------------
@@ -630,26 +653,98 @@ summary(tobit_5_sel_4)
 #--------------------------------------------------
 
 set.seed(6)
-xs <- runif(1000, -1, 1)
-ys <- xs + eps[, 1] > 0
-yo1 <- xs + eps[, 2]
-yo2 <- xs + eps[, 3]
+
+# Copy same matrix of random error terms.
+# tobit_5_ex5 <- tobit_5_ex4[, c('eps1', 'eps2', 'eps3')]
+# Instead, generate new matrix with twice as many observations.
+
+# Generate matrix of random error terms.
+tobit_5_ex5 <- data.frame(rmvnorm(1000, c(0, 0, 0), vc))
+colnames(tobit_5_ex5) <- c('eps1', 'eps2', 'eps3')
+# Also, this uses a multivariate normal distribution of errors,
+# which is the true specification of the Tobit model.
+# The examples in the paper by Toomet and Henningsen
+# use a misspecified model with errors following the Chi-squared
+# distribution.
+# In those examples, large biases occur, which suggests that
+# the estimates are sensitive to the distribution of errors.
+# Although you do not observe the errors in the selection equation,
+# you can at least choose your model for each of the equations
+# such that the distributions of residuals are normal.
+
+# Generate selection variable (unobserved).
+tobit_5_ex5[, 'xs'] <- runif(1000, -1, 1)
+
+
+# Generate logical selection variable in the selection equation.
+tobit_5_ex5[, 'ys'] <- tobit_5_ex5[, 'xs'] +
+  tobit_5_ex5[, 'eps1'] > 0
+# Note that true slope coefficient is one
+# and the true intercept coefficient is zero.
+
+
+# Generate dependent variable (partially observed).
+# Model 1:
+tobit_5_ex5[, 'yo1'] <- tobit_5_ex5[, 'xs'] +
+  tobit_5_ex5[, 'eps2']
+# Model 2:
+tobit_5_ex5[, 'yo2'] <- tobit_5_ex5[, 'xs'] +
+  tobit_5_ex5[, 'eps3']
+# Note again that true slope coefficients are one
+# and the true intercept coefficients are zero.
+
+
+
+# Generate dependent variable in the outcome equation.
+# (Leave only what is observed.)
+# tobit_5_ex5[, 'yo1'] <- tobit_5_ex5[, 'yo1'] *
+#   (tobit_5_ex5[, 'ys'] > 0)
+# tobit_5_ex5[, 'yo2'] <- tobit_5_ex5[, 'yo2'] *
+#   (tobit_5_ex5[, 'ys'] <= 0)
+# Not required, since the likelihood function
+# uses only the observations for the corresponding
+# model based on whether ys is TRUE or FALSE.
+
 
 #--------------------------------------------------
 # Estimate Model that Accounts for Sample Selection
 #--------------------------------------------------
 
-summary(tmp <- selection(ys ~ xs, list(yo1 ~ xs, yo2 ~ xs), iterlim = 20))
+# As in examples 2 and 3, both equations have the same explanatory
+# variable, so the independence assumption is not satisfied.
+tobit_5_sel_5 <- selection(selection = ys ~ xs,
+                           outcome = list(yo1 ~ xs,
+                                          yo2 ~ xs),
+                           iterlim = 20,
+                           data = tobit_5_ex5)
+
+summary(tobit_5_sel_5)
+
+
 
 #--------------------------------------------------
 # Estimate Model that Ignores Sample Selection
 #--------------------------------------------------
 
 
-# In this case, there exist two models.
-coef(summary(lm(yo1 ~ xs, subset = ys == 0)))
+# Within the Tobit-5 model, there exist two models.
+# Estimate the feasible linear regression model
+# with only the variables observed.
 
-coef(summary(lm(yo2 ~ xs, subset = ys == 1)))
+# It drops all the information about the observations
+# that were not selected for the particular model.
+
+# Model 1:
+tobit_5_lm_5_sel1 <- lm(formula = yo1 ~ xs,
+                        data = tobit_5_ex5[tobit_5_ex5[, 'ys'], ])
+
+summary(tobit_5_lm_5_sel1)
+
+# Model 2:
+tobit_5_lm_5_sel2 <- lm(formula = yo2 ~ xs,
+                        data = tobit_5_ex5[!tobit_5_ex5[, 'ys'], ])
+
+summary(tobit_5_lm_5_sel2)
 
 
 #--------------------------------------------------
