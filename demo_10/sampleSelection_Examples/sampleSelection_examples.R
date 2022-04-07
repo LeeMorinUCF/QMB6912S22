@@ -39,14 +39,14 @@ rm(list=ls(all=TRUE))
 # setwd(wd_path)
 
 
-# Set data directory.
-data_dir <- 'Data'
-
-# Set directory for storing figures.
-fig_dir <- 'Figures'
-
-# Set directory for storing tables.
-tab_dir <- 'Tables'
+# # Set data directory.
+# data_dir <- 'Data'
+#
+# # Set directory for storing figures.
+# fig_dir <- 'Figures'
+#
+# # Set directory for storing tables.
+# tab_dir <- 'Tables'
 
 
 ##################################################
