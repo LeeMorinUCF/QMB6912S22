@@ -39,6 +39,16 @@ rm(list=ls(all=TRUE))
 # setwd(wd_path)
 
 
+# Set data directory.
+data_dir <- 'Data'
+
+# Set directory for storing figures.
+fig_dir <- 'Figures'
+
+# Set directory for storing tables.
+tab_dir <- 'Tables'
+
+
 ##################################################
 # Load libraries
 ##################################################
@@ -59,8 +69,6 @@ library(mvtnorm)
 # First, we estimate a correctly specified
 # Tobit-2 model with exclusion restriction.
 
-
-
 #--------------------------------------------------
 # Generate data
 #--------------------------------------------------
@@ -69,58 +77,64 @@ library(mvtnorm)
 set.seed(0)
 
 # Generate matrix of random error terms.
-eps <- rmvnorm(500, c(0, 0),
+tobit_2_ex1 <- data.frame(rmvnorm(500, c(0, 0),
                matrix(c( 1.0, -0.7,
-                         -0.7,  1.0), 2, 2))
+                         -0.7,  1.0), 2, 2)))
+colnames(tobit_2_ex1) <- c('eps1', 'eps2')
 
 # Generate selection variable (unobserved).
-xs <- runif(500)
+tobit_2_ex1[, 'xs'] <- runif(500)
 
 # Generate logical selection variable in the selection equation.
-ys <- xs + eps[, 1] > 0
+tobit_2_ex1[, 'ys'] <- tobit_2_ex1[, 'xs'] +
+  tobit_2_ex1[, 'eps1'] > 0
 # Note that true slope coefficient is one
 # and the true intercept coefficient is zero.
 
 
 # Generate explanatory variable in the outcome equation (observed).
-xo <- runif(500)
+tobit_2_ex1[, 'xo'] <- runif(500)
 
 # Generate dependent variable (partially observed).
-yoX <- xo + eps[, 2]
+tobit_2_ex1[, 'yoX'] <- tobit_2_ex1[, 'xo'] +
+  tobit_2_ex1[, 'eps2']
 # Note again that true slope coefficient is one
 # and the true intercept coefficient is zero.
 
 # Generate dependent variable in the outcome equation (observed).
-yo <- yoX * (ys > 0)
+tobit_2_ex1[, 'yo'] <- tobit_2_ex1[, 'yoX'] *
+  (tobit_2_ex1[, 'ys'] > 0)
 
 
-# Collect these into a data frame.
-toit_2_ex1 <- data.frame(yo = yo,
-                         yoX = yoX,
-                         xo = xo,
-                         ys = ys,
-                         xs = xs,
-                         eps1 = eps[, 1],
-                         eps2 = eps[, 2])
+# # Collect these into a data frame.
+# tobit_2_ex1 <- data.frame(yo = yo,
+#                          yoX = yoX,
+#                          xo = xo,
+#                          ys = ys,
+#                          xs = xs,
+#                          eps1 = eps[, 1],
+#                          eps2 = eps[, 2])
 
 # Note the observations set to zero.
-summary(toit_2_ex1)
+summary(tobit_2_ex1)
 
 # Inspect only the observed events.
-summary(toit_2_ex1[toit_2_ex1[, 'ys'], ])
-
-
-summary(yo)
-sum(yo == 0)
+summary(tobit_2_ex1[tobit_2_ex1[, 'ys'], ])
 
 
 #--------------------------------------------------
 # Estimate Model that Accounts for Sample Selection
 #--------------------------------------------------
 
+# This takes two equations. The first is
+# a specification of the equation that determines
+# when an observation is selected.
+# It has a binary dependent variable.
+# The second is the regression equation,
+# using an independent explanatory variable.
 tobit_2_sel_1 <- selection(selection = ys ~ xs,
                            outcome = yo ~ xo,
-                           data = toit_2_ex1)
+                           data = tobit_2_ex1)
 
 summary(tobit_2_sel_1)
 # Notice the slope coefficients are close to 1 (the true values).
@@ -130,15 +144,17 @@ summary(tobit_2_sel_1)
 
 
 
+
 #--------------------------------------------------
-# Compare with Model that Ignores Sample Selection
+# Estimate Model that Ignores Sample Selection
 #--------------------------------------------------
+
 
 
 # Estimate the feasible linear model
 # with some rows observed to be zero.
 tobit_2_lm_1_full <- lm(formula = yo ~ xo,
-                   data = toit_2_ex1)
+                   data = tobit_2_ex1)
 
 summary(tobit_2_lm_1_full)
 # Notice the coefficients differ from the true values.
@@ -150,7 +166,7 @@ summary(tobit_2_lm_1_full)
 # the linear model would be correctly specified.
 
 tobit_2_lm_1_inf <- lm(formula = yoX ~ xo,
-                       data = toit_2_ex1)
+                       data = tobit_2_ex1)
 
 summary(tobit_2_lm_1_inf)
 
@@ -164,7 +180,7 @@ summary(tobit_2_lm_1_inf)
 # It drops all the information about the observations
 # that were not selected.
 tobit_2_lm_1_sel <- lm(formula = yoX ~ xo,
-                       data = toit_2_ex1[toit_2_ex1[, 'ys'], ])
+                       data = tobit_2_ex1[tobit_2_ex1[, 'ys'], ])
 
 summary(tobit_2_lm_1_sel)
 
@@ -174,3 +190,435 @@ summary(tobit_2_lm_1_sel)
 
 # Since this drops observations with partial information,
 # however, these estimates are more variable.
+
+
+
+#--------------------------------------------------
+# Compare Models With and Without Sample Selection
+#--------------------------------------------------
+
+
+# Now compare these estimates graphically.
+
+# fig_file_name <- 'tobit_2_sel_1.pdf'
+# out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+# pdf(out_file_name)
+
+plot(tobit_2_ex1[, 'xo'],
+     tobit_2_ex1[, 'yoX'],
+     main = c('Observations Selected (red) and Unobserved (blue)',
+              '(Independent Selection and Explanatory Variables)'),
+     xlab = 'Explanatory Variable (xo)',
+     ylab = 'Dependent Variable (Yox)',
+     col = 'blue')
+
+# Color the observations that pass the selection.
+points(tobit_2_ex1[tobit_2_ex1[, 'ys'], 'xo'],
+       tobit_2_ex1[tobit_2_ex1[, 'ys'], 'yo'],
+       # lwd = 3,
+       col = 'red')
+
+# Add a line for the linear relationship from the true model.
+xo_grid <- seq(0, 1, by = 0.01)
+lines(xo_grid,
+      xo_grid,
+      lwd = 3,
+      col = 'black')
+
+
+# Add a line for the linear prediction from the selection model.
+lines(xo_grid,
+      predict(tobit_2_sel_1,
+              newdata = data.frame(xo = xo_grid)),
+      lwd = 3,
+      col = 'black',
+      lty = 2)
+
+# Add a line for the linear prediction from the feasible regression model.
+lines(xo_grid,
+      predict(tobit_2_lm_1_sel,
+              newdata = data.frame(xo = xo_grid)),
+      lwd = 3,
+      col = 'black',
+      lty = 3)
+
+# dev.off()
+
+
+# The prediction from the sample selection model
+# (the dashed line) is closer to the true relationship
+# (the solid line) than is the prediction from the
+# linear model on the selected data only (dotted line).
+
+# The prediction from the regression model is downward biased
+# because it does not take into account the fact that we tend
+# to observe the observations with low realizations of eps1.
+
+# As expected, the slope is steeper for the linear model.
+
+
+##################################################
+# Example 2: Type-2 Tobit Model
+##################################################
+
+# Next, we estimate a correctly specified
+# Tobit-2 model without the exclusion restriction.
+# This time we use the same explanatory
+# variable as the selection variable (xs),
+# instead of an independent variable (xo)
+# in the equation for yoX.
+
+
+
+#--------------------------------------------------
+# Generate data
+#--------------------------------------------------
+
+# Copy variables from the previous example
+# for greater comparability.
+tobit_2_ex2 <- tobit_2_ex1[, c('eps1', 'eps2', 'xs', 'ys')]
+
+# Generate dependent variable (partially observed).
+tobit_2_ex2[, 'yoX'] <- tobit_2_ex2[, 'xs'] +
+  tobit_2_ex2[, 'eps2']
+# Note again that true slope coefficient is one
+# and the true intercept coefficient is zero.
+
+# Generate dependent variable in the outcome equation (observed).
+tobit_2_ex2[, 'yo'] <- tobit_2_ex2[, 'yoX'] *
+  (tobit_2_ex2[, 'ys'] > 0)
+
+
+
+#--------------------------------------------------
+# Estimate Model that Accounts for Sample Selection
+#--------------------------------------------------
+
+# This time, both equations have the same explanatory
+# variable, so the independence assumption is not satisfied.
+tobit_2_sel_2 <- selection(selection = ys ~ xs,
+                           outcome = yo ~ xs,
+                           data = tobit_2_ex2)
+
+summary(tobit_2_sel_2)
+# The estimates are still unbiased but standard errors
+# are substantially larger in this case.
+# The exclusion restriction (independent information about
+# the selection process) has a certain identifying power that
+# we now have lost.
+
+# The result:
+# If you have access to a separate variable that
+# predicts when the data will be observed, then
+# the estimates will be estimated more accurately.
+
+
+#--------------------------------------------------
+# Estimate Model that Ignores Sample Selection
+#--------------------------------------------------
+
+# Estimate the feasible linear regression model
+# with only the variables observed.
+# It drops all the information about the observations
+# that were not selected.
+tobit_2_lm_2_sel <- lm(formula = yoX ~ xs,
+                       data = tobit_2_ex2[tobit_2_ex2[, 'ys'], ])
+
+summary(tobit_2_lm_2_sel)
+
+#--------------------------------------------------
+# Compare Models With and Without Sample Selection
+#--------------------------------------------------
+
+# Now compare these estimates graphically.
+
+# fig_file_name <- 'tobit_2_sel_2.pdf'
+# out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+# pdf(out_file_name)
+
+plot(tobit_2_ex2[, 'xs'],
+     tobit_2_ex2[, 'yoX'],
+     main = c('Observations Selected (red) and Unobserved (blue)',
+              '(Perfectly Correlated Selection and Explanatory Variables)'),
+     xlab = 'Explanatory Variable (xs)',
+     ylab = 'Dependent Variable (Yox)',
+     col = 'blue')
+
+# Color the observations that pass the selection.
+points(tobit_2_ex2[tobit_2_ex2[, 'ys'], 'xs'],
+       tobit_2_ex2[tobit_2_ex2[, 'ys'], 'yo'],
+       # lwd = 3,
+       col = 'red')
+
+# Add a line for the linear relationship from the true model.
+# xo_grid <- seq(0, 1, by = 0.01)
+lines(xo_grid,
+      xo_grid,
+      lwd = 3,
+      col = 'black')
+
+
+# Add a line for the linear prediction from the selection model.
+lines(xo_grid,
+      predict(tobit_2_sel_2,
+              newdata = data.frame(xs = xo_grid)),
+      lwd = 3,
+      col = 'black',
+      lty = 2)
+
+# Add a line for the linear prediction from the feasible regression model.
+lines(xo_grid,
+      predict(tobit_2_lm_2_sel,
+              newdata = data.frame(xs = xo_grid)),
+      lwd = 3,
+      col = 'black',
+      lty = 3)
+
+# dev.off()
+
+# The selection model (dashed line) is slightly closer
+# to the true relationship (solid line) but offers only a
+# slight improvement over the linear model (dotted line),
+# when the selection is not independent of the
+# explanatory variable.
+# The slope is still slightly steeper for the linear model.
+
+
+##################################################
+# Example 3: Type-2 Tobit Model
+##################################################
+
+# Next, we estimate a correctly specified
+# Tobit-2 model with exclusion restriction.
+# This time we provide more variation
+# in the latent selection equation.
+
+
+
+#--------------------------------------------------
+# Generate data
+#--------------------------------------------------
+
+# Copy variables from the first example
+# for greater comparability.
+tobit_2_ex3 <- tobit_2_ex1[, c('eps1', 'eps2')]
+
+# Generate selection variable (unobserved).
+tobit_2_ex3[, 'xs'] <- runif(500, -5, 5)
+
+# Generate logical selection variable in the selection equation.
+tobit_2_ex3[, 'ys'] <- tobit_2_ex3[, 'xs'] +
+  tobit_2_ex3[, 'eps1'] > 0
+# Note that true slope coefficient is one
+# and the true intercept coefficient is zero.
+
+
+# Generate dependent variable (partially observed).
+tobit_2_ex3[, 'yoX'] <- tobit_2_ex3[, 'xs'] +
+  tobit_2_ex3[, 'eps2']
+# Note again that true slope coefficient is one
+# and the true intercept coefficient is zero.
+
+# Generate dependent variable in the outcome equation (observed).
+tobit_2_ex3[, 'yo'] <- tobit_2_ex3[, 'yoX'] *
+  (tobit_2_ex3[, 'ys'] > 0)
+
+
+
+#--------------------------------------------------
+# Estimate Model that Accounts for Sample Selection
+#--------------------------------------------------
+
+# Again, both equations have the same explanatory
+# variable, so the independence assumption is not satisfied.
+tobit_2_sel_3 <- selection(selection = ys ~ xs,
+                           outcome = yo ~ xs,
+                           data = tobit_2_ex3)
+
+summary(tobit_2_sel_3)
+# This time it gives very accurate readings of the slope coefficients
+# because when the selection variable provides more
+# information about the probability of selection,
+# the selection bias is more accurately accounted for.
+
+#--------------------------------------------------
+# Estimate Model that Ignores Sample Selection
+#--------------------------------------------------
+
+# Estimate the feasible linear regression model
+# with only the variables observed.
+# It drops all the information about the observations
+# that were not selected.
+tobit_2_lm_3_sel <- lm(formula = yoX ~ xs,
+                       data = tobit_2_ex3[tobit_2_ex3[, 'ys'], ])
+
+summary(tobit_2_lm_3_sel)
+# The variance is also smaller with more variability in the
+# selection variable.
+
+
+#--------------------------------------------------
+# Compare Models With and Without Sample Selection
+#--------------------------------------------------
+
+# Now compare these estimates graphically.
+
+# fig_file_name <- 'tobit_2_sel_2.pdf'
+# out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
+# pdf(out_file_name)
+
+plot(tobit_2_ex3[, 'xs'],
+     tobit_2_ex3[, 'yoX'],
+     main = c('Observations Selected (red) and Unobserved (blue)',
+              '(Perfectly Correlated Selection and Explanatory Variables)'),
+     xlab = 'Explanatory Variable (xs)',
+     ylab = 'Dependent Variable (Yox)',
+     col = 'blue')
+
+# Color the observations that pass the selection.
+points(tobit_2_ex3[tobit_2_ex3[, 'ys'], 'xs'],
+       tobit_2_ex3[tobit_2_ex3[, 'ys'], 'yo'],
+       # lwd = 3,
+       col = 'red')
+
+# Add a line for the linear relationship from the true model.
+xs_grid <- seq(-5, 5, by = 0.01)
+lines(xs_grid,
+      xs_grid,
+      lwd = 3,
+      col = 'black')
+
+
+# Add a line for the linear prediction from the selection model.
+lines(xs_grid,
+      predict(tobit_2_sel_3,
+              newdata = data.frame(xs = xs_grid)),
+      lwd = 3,
+      col = 'black',
+      lty = 2)
+
+# Add a line for the linear prediction from the feasible regression model.
+lines(xs_grid,
+      predict(tobit_2_lm_3_sel,
+              newdata = data.frame(xs = xs_grid)),
+      lwd = 3,
+      col = 'black',
+      lty = 3)
+
+# dev.off()
+
+# Again, the selection model (dashed line) is closer
+# to the true relationship (solid line) than the
+# linear model (dotted line), when the selection is
+# not independent of the explanatory variable
+# but has enough variance to provide a clean sample.
+# Again, the slope is steeper for the linear model.
+
+
+##################################################
+# Example 4: Type-5 Tobit Model
+##################################################
+
+# Next, we estimate a correctly specified
+# Tobit-5 model with a switching regression model.
+# That is, instead of being observed or unobserved,
+# the outcome is recorded from the result of one or two models.
+# In this version, the selection variable is independent
+# of the explanatory variable.
+
+
+
+
+#--------------------------------------------------
+# Generate data
+#--------------------------------------------------
+
+set.seed(0)
+
+# Create a trivariate covariance matrix.
+vc <- diag(3)
+vc[lower.tri(vc)] <- c(0.9, 0.5, 0.1)
+vc[upper.tri(vc)] <- vc[lower.tri(vc)]
+
+
+
+
+eps <- rmvnorm(500, c(0, 0, 0), vc)
+xs <- runif(500)
+ys <- xs + eps[, 1] > 0
+
+xo1 <- runif(500)
+yo1 <- xo1 + eps[, 2]
+
+
+xo2 <- runif(500)
+yo2 <- xo2 + eps[, 3]
+
+
+
+#--------------------------------------------------
+# Estimate Model that Accounts for Sample Selection
+#--------------------------------------------------
+
+summary(selection(ys ~ xs, list(yo1 ~ xo1, yo2 ~ xo2), iterlim = 20))
+
+#--------------------------------------------------
+# Estimate Model that Ignores Sample Selection
+#--------------------------------------------------
+
+
+
+#--------------------------------------------------
+# Compare Models With and Without Sample Selection
+#--------------------------------------------------
+
+
+##################################################
+# Example 5: Type-5 Tobit Model
+##################################################
+
+# Next, we estimate a correctly specified
+# Tobit-5 model with a switching regression model.
+# That is, instead of being observed or unobserved,
+# the outcome is recorded from the result of one or two models.
+# In this version, the selection variable is perfectly
+# correlated with the explanatory variable.
+
+
+
+#--------------------------------------------------
+# Generate data
+#--------------------------------------------------
+
+set.seed(6)
+xs <- runif(1000, -1, 1)
+ys <- xs + eps[, 1] > 0
+yo1 <- xs + eps[, 2]
+yo2 <- xs + eps[, 3]
+
+#--------------------------------------------------
+# Estimate Model that Accounts for Sample Selection
+#--------------------------------------------------
+
+summary(tmp <- selection(ys ~ xs, list(yo1 ~ xs, yo2 ~ xs), iterlim = 20))
+
+#--------------------------------------------------
+# Estimate Model that Ignores Sample Selection
+#--------------------------------------------------
+
+
+# In this case, there exist two models.
+coef(summary(lm(yo1 ~ xs, subset = ys == 0)))
+
+coef(summary(lm(yo2 ~ xs, subset = ys == 1)))
+
+
+#--------------------------------------------------
+# Compare Models With and Without Sample Selection
+#--------------------------------------------------
+
+
+##################################################
+# End
+##################################################
+
