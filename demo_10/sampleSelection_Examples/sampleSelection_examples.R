@@ -576,10 +576,10 @@ tobit_5_ex4[, 'yo2'] <- tobit_5_ex4[, 'xo2'] +
 
 # Generate dependent variable in the outcome equation.
 # (Leave only what is observed.)
-# tobit_5_ex4[, 'yo1'] <- tobit_5_ex4[, 'yo1'] *
-#   (tobit_5_ex4[, 'ys'] > 0)
-# tobit_5_ex4[, 'yo2'] <- tobit_5_ex4[, 'yo2'] *
-#   (tobit_5_ex4[, 'ys'] <= 0)
+tobit_5_ex4[, 'yo1'] <- tobit_5_ex4[, 'yo1'] *
+  (tobit_5_ex4[, 'ys'] <= 0)
+tobit_5_ex4[, 'yo2'] <- tobit_5_ex4[, 'yo2'] *
+  (tobit_5_ex4[, 'ys'] > 0)
 # Not required, since the likelihood function
 # uses only the observations for the corresponding
 # model based on whether ys is TRUE or FALSE.
@@ -615,24 +615,19 @@ summary(tobit_5_sel_4)
 
 # Model 1:
 tobit_5_lm_4_sel1 <- lm(formula = yo1 ~ xo1,
-                        data = tobit_5_ex4[tobit_5_ex4[, 'ys'], ])
+                        data = tobit_5_ex4[!tobit_5_ex4[, 'ys'], ])
 
 summary(tobit_5_lm_4_sel1)
 
 # Model 2:
 tobit_5_lm_4_sel2 <- lm(formula = yo2 ~ xo2,
-                        data = tobit_5_ex4[!tobit_5_ex4[, 'ys'], ])
+                        data = tobit_5_ex4[tobit_5_ex4[, 'ys'], ])
 
 summary(tobit_5_lm_4_sel2)
 
 # The results are similar but the variances are larger
 # as each regression model ignores the information
 # from the other equation.
-
-
-#--------------------------------------------------
-# Compare Models With and Without Sample Selection
-#--------------------------------------------------
 
 
 ##################################################
@@ -697,10 +692,10 @@ tobit_5_ex5[, 'yo2'] <- tobit_5_ex5[, 'xs'] +
 
 # Generate dependent variable in the outcome equation.
 # (Leave only what is observed.)
-# tobit_5_ex5[, 'yo1'] <- tobit_5_ex5[, 'yo1'] *
-#   (tobit_5_ex5[, 'ys'] > 0)
-# tobit_5_ex5[, 'yo2'] <- tobit_5_ex5[, 'yo2'] *
-#   (tobit_5_ex5[, 'ys'] <= 0)
+tobit_5_ex5[, 'yo1'] <- tobit_5_ex5[, 'yo1'] *
+  (tobit_5_ex5[, 'ys'] <= 0)
+tobit_5_ex5[, 'yo2'] <- tobit_5_ex5[, 'yo2'] *
+  (tobit_5_ex5[, 'ys'] > 0)
 # Not required, since the likelihood function
 # uses only the observations for the corresponding
 # model based on whether ys is TRUE or FALSE.
@@ -736,20 +731,30 @@ summary(tobit_5_sel_5)
 
 # Model 1:
 tobit_5_lm_5_sel1 <- lm(formula = yo1 ~ xs,
-                        data = tobit_5_ex5[tobit_5_ex5[, 'ys'], ])
+                        data = tobit_5_ex5[!tobit_5_ex5[, 'ys'], ])
 
 summary(tobit_5_lm_5_sel1)
 
 # Model 2:
 tobit_5_lm_5_sel2 <- lm(formula = yo2 ~ xs,
-                        data = tobit_5_ex5[!tobit_5_ex5[, 'ys'], ])
+                        data = tobit_5_ex5[tobit_5_ex5[, 'ys'], ])
 
 summary(tobit_5_lm_5_sel2)
 
 
-#--------------------------------------------------
-# Compare Models With and Without Sample Selection
-#--------------------------------------------------
+# The results are similar but the variances are larger
+# as each regression model ignores the information
+# from the other equation.
+
+
+# Overall, specification error in the error distribution
+# can cause serious problems, so it is important
+# to specify the models so that the residuals are normal.
+# Conversely, the independence assumption is not critical
+# to the accuracy of the estimates. Independent selection
+# variables will improve accuracy but the model still works
+# even if the selection variable is perfectly correlated
+# with the variables in each of the switching models.
 
 
 ##################################################
