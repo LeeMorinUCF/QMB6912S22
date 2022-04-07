@@ -541,26 +541,65 @@ vc[lower.tri(vc)] <- c(0.9, 0.5, 0.1)
 vc[upper.tri(vc)] <- vc[lower.tri(vc)]
 
 
+# Generate matrix of random error terms.
+tobit_5_ex4 <- data.frame(rmvnorm(500, c(0, 0, 0), vc))
+colnames(tobit_5_ex4) <- c('eps1', 'eps2', 'eps3')
+
+# Generate selection variable (unobserved).
+tobit_5_ex4[, 'xs'] <- runif(500)
+
+# Generate logical selection variable in the selection equation.
+tobit_5_ex4[, 'ys'] <- tobit_5_ex4[, 'xs'] +
+  tobit_5_ex4[, 'eps1'] > 0
+# Note that true slope coefficient is one
+# and the true intercept coefficient is zero.
 
 
-eps <- rmvnorm(500, c(0, 0, 0), vc)
-xs <- runif(500)
-ys <- xs + eps[, 1] > 0
+# Generate explanatory variables in the outcome equation (observed).
+# Model 1:
+tobit_5_ex4[, 'xo1'] <- runif(500)
+# Model 2:
+tobit_5_ex4[, 'xo2'] <- runif(500)
 
-xo1 <- runif(500)
-yo1 <- xo1 + eps[, 2]
+
+# Generate dependent variable (partially observed).
+# Model 1:
+tobit_5_ex4[, 'yo1'] <- tobit_5_ex4[, 'xo1'] +
+  tobit_5_ex4[, 'eps2']
+# Model 2:
+tobit_5_ex4[, 'yo2'] <- tobit_5_ex4[, 'xo2'] +
+  tobit_5_ex4[, 'eps3']
+# Note again that true slope coefficients are one
+# and the true intercept coefficients are zero.
 
 
-xo2 <- runif(500)
-yo2 <- xo2 + eps[, 3]
 
+# Generate dependent variable in the outcome equation.
+# (Leave only what is observed.)
+# tobit_5_ex4[, 'yo1'] <- tobit_5_ex4[, 'yo1'] *
+#   (tobit_5_ex4[, 'ys'] > 0)
+# tobit_5_ex4[, 'yo2'] <- tobit_5_ex4[, 'yo2'] *
+#   (tobit_5_ex4[, 'ys'] <= 0)
+# Not required, since the likelihood function
+# uses only the observations for the corresponding
+# model based on whether ys is TRUE or FALSE.
 
 
 #--------------------------------------------------
 # Estimate Model that Accounts for Sample Selection
 #--------------------------------------------------
 
-summary(selection(ys ~ xs, list(yo1 ~ xo1, yo2 ~ xo2), iterlim = 20))
+# Again, both equations have the same explanatory
+# variable, so the independence assumption is not satisfied.
+tobit_5_sel_4 <- selection(selection = ys ~ xs,
+                           outcome = list(yo1 ~ xo1,
+                                          yo2 ~ xo2),
+                           iterlim = 20,
+                           data = tobit_5_ex4)
+
+summary(tobit_5_sel_4)
+
+
 
 #--------------------------------------------------
 # Estimate Model that Ignores Sample Selection
