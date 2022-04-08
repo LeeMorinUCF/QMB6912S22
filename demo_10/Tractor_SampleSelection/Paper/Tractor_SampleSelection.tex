@@ -103,8 +103,13 @@ within a Generalized Additive Model.
 
 Then I will further investigate this nonlinear relationship
 by considering the issue of sample selection:
-John Deere may produce tractors of specific qualities based on
-their perceived value to typical John Deere customers, 
+John Deere 
+may produce 
+tractors 
+of specific qualities based on
+their perceived value to typical 
+John Deere 
+customers, 
 in ways that are not represented by the variables in the dataset.
 
 
@@ -144,9 +149,61 @@ The $F$-statistic is large, indicating that it is a better candidate than the si
 The new squared horsepower variable is statistically significant and the theory behind it is sound, since above a certain point, added horsepower may not improve performance but will cost more to operate. 
 This new model is much improved over the previous models with a linear specification for horsepower.
 Next, I will attempt to improve on this specification, 
-as we did for Problem Set \#8. 
+using Tobit models for sample selection. 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \pagebreak
+\subsubsection{Separate Models by Brand}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+To test for many possible differences in 
+models by brand of tractor, 
+Table \ref{tab:reg_johndeere}
+shows the estimates for two separate models
+by brand of tractor.
+%
+Model 1 shows the estimates for 
+the full sample,
+Model 2 shows the estimates from the full model for 
+John Deere tractors
+and Model 4 
+represents all other brands. 
+% 
+Models 3 and 5 show the estimates from a reduced version of each model, 
+in which all coefficients are statistically significant. 
+% 
+The coefficients appear similar across the two subsamples.
+Notable differences include the statistical significance for 
+the indicators for four-wheel drive, 
+manual transmission and an enclosed cab. 
+These features seem to change the value of 
+other tractors, but perhaps these coefficients are not measured 
+accurately for the small sample of 39 
+John Deere tractors. 
+
+\input{../Tables/reg_johndeere}
+
+We can also test for all of the differences at the same time
+by using an $F$-test. 
+In this case, the full, unrestricted model has $K = 2\times9 = 18$ parameters, one for each variable in two models. 
+The test that all of the coefficients are the same has $M = 9 - 1 = 8$
+restrictions. 
+The one restriction fewer accounts for the John Deere indicator
+in the full model, 
+which allows for two separate intercepts. 
+% 
+The $F$-statistic has a value of 
+
+$$ 
+\frac{(RSS_M - RSS)/M}{RSS/(N - K - 1)} = \frac{(42.15882 - 41.1432)/3}{41.1432/263} = 0.7929991. 
+$$
+
+This is also a very low value for the $F$-statistic. 
+There is no evidence to reject the null that all 
+coefficients are equal across both samples 
+and conclude that the John Deere indicator
+should be the only brand difference left in the model. 
 
 
 
@@ -171,9 +228,33 @@ consider the set of variables that are related to
 whether or not John Deere makes a tractor
 with the characteristics observed in the dataset. 
 
+\input{../Tables/reg_probit}
 
+Table \ref{tab:reg_probit} 
+shows the estimates for a probit model to predict the selection
+into samples by brand name.
+% 
+Model 1 in Table \ref{tab:reg_probit} 
+shows a preliminary probit model to predict the selection indicator,
+with all the other explanatory variables in the model.
+John Deere tractors are more likely to be gasoline-powered,
+have manual transmissions, and less likely to have an enclosed cab.
+% 
+Model 2 shows the result of a variable-reduction exercise
+to eliminate variables that are not statistically significant.
+These estimates provide a concise but useful model to
+indicate the tractor designs that would be favored by John Deere
+engineers and customers.
+This model is used to specify the selection equation
+of the sample selection estimates discussed next. 
+ 
 % \clearpage
 \subsection{Estimating a Sample Selection Model}
+
+
+
+
+
 
 
 

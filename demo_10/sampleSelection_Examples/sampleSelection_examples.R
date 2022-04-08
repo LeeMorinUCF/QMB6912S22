@@ -620,9 +620,9 @@ tobit_5_ex4[, 'yo2'] <- tobit_5_ex4[, 'xo2'] +
 # Generate dependent variable in the outcome equation.
 # (Leave only what is observed.)
 tobit_5_ex4[, 'yo1'] <- tobit_5_ex4[, 'yo1'] *
-  (tobit_5_ex4[, 'ys'] <= 0)
+  (tobit_5_ex4[, 'ys'] == 0)
 tobit_5_ex4[, 'yo2'] <- tobit_5_ex4[, 'yo2'] *
-  (tobit_5_ex4[, 'ys'] > 0)
+  (tobit_5_ex4[, 'ys'] == 1)
 # Not required, since the likelihood function
 # uses only the observations for the corresponding
 # model based on whether ys is TRUE or FALSE.
@@ -766,9 +766,9 @@ tobit_5_ex5[, 'yo2'] <- tobit_5_ex5[, 'xs'] +
 # Generate dependent variable in the outcome equation.
 # (Leave only what is observed.)
 tobit_5_ex5[, 'yo1'] <- tobit_5_ex5[, 'yo1'] *
-  (tobit_5_ex5[, 'ys'] <= 0)
+  (tobit_5_ex5[, 'ys'] == 0)
 tobit_5_ex5[, 'yo2'] <- tobit_5_ex5[, 'yo2'] *
-  (tobit_5_ex5[, 'ys'] > 0)
+  (tobit_5_ex5[, 'ys'] == 1)
 # Not required, since the likelihood function
 # uses only the observations for the corresponding
 # model based on whether ys is TRUE or FALSE.

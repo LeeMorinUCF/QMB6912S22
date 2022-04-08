@@ -460,12 +460,12 @@ texreg(l = list(lm_model_8,
 
 ##################################################
 # Estimating a Regression Model
-# Model 12: Linear model for log of dollar sale price
+# Models 12-13: Linear model for log of dollar sale price
 # Separate Model for John Deere Tractors
 ##################################################
 
 
-# Estimate a regression model.
+# Estimate the full regression model.
 lm_model_12 <- lm(data = tractor_sales[tractor_sales[, 'johndeere'] == 1, ],
                   formula = log_saleprice ~ horsepower + squared_horsepower +
                     age + enghours +
@@ -475,30 +475,60 @@ lm_model_12 <- lm(data = tractor_sales[tractor_sales[, 'johndeere'] == 1, ],
 # Output the results to screen.
 print(summary(lm_model_12))
 
-
-##################################################
-# Estimating a Regression Model
-# Model 13: Linear model for log of dollar sale price
-# Separate Model for Tractors other than John Deere
-##################################################
-
-
-# Estimate a regression model.
-lm_model_13 <- lm(data = tractor_sales[tractor_sales[, 'johndeere'] == 0, ],
-                  formula = log_saleprice ~ horsepower + squared_horsepower +
+# Estimate a reduced regression model.
+lm_model_13 <- lm(data = tractor_sales[tractor_sales[, 'johndeere'] == 1, ],
+                  formula = log_saleprice ~
+                    horsepower + squared_horsepower +
                     age + enghours +
-                    diesel + fwd + manual +
+                    # diesel +
+                    # fwd +
+                    # manual +
                     cab)
 
 # Output the results to screen.
 print(summary(lm_model_13))
 
 
+##################################################
+# Estimating a Regression Model
+# Models 14-15: Linear model for log of dollar sale price
+# Separate Model for Tractors other than John Deere
+##################################################
+
+
+# Estimate the full regression model.
+lm_model_14 <- lm(data = tractor_sales[tractor_sales[, 'johndeere'] == 0, ],
+                  formula = log_saleprice ~ horsepower + squared_horsepower +
+                    age + enghours +
+                    diesel + fwd + manual +
+                    cab)
+
+# Output the results to screen.
+print(summary(lm_model_14))
+
+
+# Estimate a reduced regression model.
+lm_model_15 <- lm(data = tractor_sales[tractor_sales[, 'johndeere'] == 0, ],
+                  formula = log_saleprice ~
+                    horsepower + squared_horsepower +
+                    age + enghours +
+                    # diesel +
+                    fwd + manual +
+                    cab)
+
+# Output the results to screen.
+print(summary(lm_model_15))
+
+
+
 # Print the output to a LaTeX file.
 tab_file_name <- 'reg_johndeere.tex'
 out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-texreg(l = list(lm_model_12,
-                lm_model_13),
+texreg(l = list(lm_model_7,
+                lm_model_12,
+                lm_model_13,
+                lm_model_14,
+                lm_model_15),
        digits = 5,
        file = out_file_name,
        label = 'tab:reg_johndeere',
