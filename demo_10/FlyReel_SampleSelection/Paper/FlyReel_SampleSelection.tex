@@ -280,6 +280,9 @@ to eliminate variables that are not statistically significant.
 These estimates provide a concise but useful model to
 indicate the fly reel designs that manufacturers would 
 prefer to manufacture on American soil.
+% 
+
+% 
 This model is used to specify the selection equation
 of the sample selection estimates discussed next. 
 
@@ -287,7 +290,147 @@ of the sample selection estimates discussed next.
 % \clearpage
 \subsection{Estimating a Sample Selection Model}
 
+Table \ref{tab:tobit_5_sel} shows the estimates from a model that accounts for sample selection. 
+The models are estimates from the Tobit model of type 5, 
+which is a model specification that allows for switching 
+of the observations in the sample into two models:
+one for the value of fly reels made in the USA 
+and the other for fly reels produced elsewhere.
+% 
 
+Each column shows the estimates from a separate model
+and the series of models is the result of a downward selection
+procedure in which a statistically insignificant variable
+was removed from each of the previous models in the sequence. 
+% 
+In each model, the estimates are grouped into three categories.
+% 
+The first block of coefficients describe the selection model
+to determine whether a fly reel design would be manufactured in the USA.
+These coefficients are denoted by the prefix``S:''.
+Below these lies two blocks of coefficients for the observation equations. 
+The notation ``O: <name of variable> (i)''
+indicates the coefficient for the particular variable
+in the observation equation for sample $i$. 
+In this specification, the first observation equation represents
+fly reels made overseas (\texttt{johndeere == 0}), 
+while equation 2 represents the fly reels made in the USA
+(\texttt{johndeere == 1}).
+
+
+Model 1 shows the estimates from the full model. 
+Several of the coefficients in the model are 
+statistically insignificant and the model has numerical issues.
+In particular, some of the standard errors are undefined,
+evidenced by the missing standard error for \texttt{sigma1}.
+This suggests that the likelihood function is flat in some areas
+of the parameter space.
+%
+This model has its imperfections but is a good start.
+Several variables are statistically insignificant
+but these can be removed one by one
+to produce a refined model.
+%
+The goal will be to obtain a final model that has
+well-defined standard errors for all variables
+and, ideally, all coefficients statistically significant.
+
+
+Model 2 shows the estimates from a reduced model,
+eliminate \texttt{Diameter} from the other-country equation.
+There still exists coefficients that are statistically insignificant
+and the numerical issue remains for \texttt{sigma1}. 
+One step further, Model 3
+eliminates \texttt{Width} from the American observation equation.
+Again, this model is an improvement but a numerical issue remains. 
+
+Model 4 excludes \texttt{Weight} from the selection equation.
+The produces a set of estimates that are numerically stable, 
+within a strictly concave region of the likelihood function. 
+This model, however, still contains
+some variables that are statistically significant.
+Model 5 excludes \texttt{Density} from the selection equation.
+Again, this model is well-behaved numerically
+but one statistically insignificant variable remains.
+
+The next step is to estimate what would be Model 6
+by eliminating \texttt{Width} from the selection equation.
+This specification is problematic, however, 
+as it produces an error message indicating severe multicollinearity. 
+% 
+With these numerical problems,
+it is better to keep the additional variable
+in the selection equation,
+even though it may be statistically insignificant.
+Notice that the remaining selection variable \texttt{Sealed}
+appears in both observation equations and there is no
+variable in the selection equation that is excluded.
+The other extreme would offer better performance,
+that is, having some variables in the selection
+equation that are not included in the observation equations.
+
+
+\input{../Tables/tobit_5_sel}
+
+\pagebreak
+
+I revert back to Model 5 to analyze the differences
+between country of manufacture, 
+in the rightmost column of Table \ref{tab:tobit_5_sel}.
+% 
+First of all, this confirms that machined reels
+are more valuable, with a coefficient of 0.76, instead of 0.63,
+as was found in the separate linear regression model.
+It also justifies the fact that only machined reels
+are produced in the USA.
+This could relate to some advantage in American production
+technology or, rather, the outdated casting techniques
+used for cheaper reels produced overseas.
+
+In the model for American-made reels,
+the coefficients on all three variables are statistically
+the same as those in the separate linear regression model.
+% 
+For the fly reels made overseas, however,
+\texttt{Width} replaces \texttt{Diameter} as a proxy for the size of the reels.
+As a consequence, density is a relatively less valuable feature.
+The value of sealed reels, however, is even greater,
+after accounting for the selection of different production techniques
+jointly with manufacturing location.
+The coefficient on sealed reels jumps to 0.90, compared to 0.65
+in the linear model.
+This suggests a higher premium than indicated earlier,
+once we also consider the choice of country of manufacture.
+Similarly, the value of machined reels rises from 0.65 to 0.76
+in the selection model, suggesting an even higher
+for this design when produced overseas.
+
+
+In conclusion, an American fly reel producer should not consider
+producing cast reels, unless the purpose is to explore the change in value.
+I suspect, however, that this outcome has been observed in
+the past, so the older production techniques have been abandoned for a reason.
+Machined reels are also more valuable when produced overseas,
+so a company has to compare the difference in labor costs with the relative
+cost of producing machined reels overseas.
+
+Similarly, sealed reels produce a much higher premium overseas
+than was originally estimated with the linear model.
+Reels produced overseas should be sealed, unless the cost of
+changing the manufacturing process would outweigh this premium.
+Likewise for the American reels, except the premium is one third the size.
+
+However it is measured, the size of a reel matters:
+bigger reels are more valuable.
+A manufacturer can compare the cost of materials with
+the premiums attached to those dimensions when producing a reel.
+
+Perhaps the largest difference is in the intercept term:
+1.07 overseas vs 2.14 in the USA, double the size.
+In the linear model, the intercepts were 2.41 vs 3.48,
+which measures a similar percentage difference.
+No matter how it is measured, there exists a substantial premium
+for fly reels made in the USA.
 
 
 

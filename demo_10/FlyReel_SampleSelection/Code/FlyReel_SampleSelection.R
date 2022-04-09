@@ -493,6 +493,7 @@ summary(tobit_5_sel_1)
 # well-defined standard errors for all variables.
 
 
+
 #--------------------------------------------------
 # Estimate Model that Accounts for Sample Selection
 # Estimate reduced model:
@@ -851,7 +852,7 @@ tobit_5_sel_6 <-
 
 # With these numerical problems,
 # it is better to keep the additional variable
-# in the selectiuon equation,
+# in the selection equation,
 # even though it may be statistically insignificant.
 # Notice that the remaining selection variable Sealed
 # appears in both observation equations and there is no
@@ -868,7 +869,21 @@ tobit_5_sel_6 <-
 
 summary(tobit_5_sel_5)
 
-# First of all, this confirms that machined reels,
+# Print the output to a LaTeX file.
+tab_file_name <- 'tobit_5_sel.tex'
+out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
+texreg(l = list(tobit_5_sel_1,
+                tobit_5_sel_2,
+                tobit_5_sel_3,
+                tobit_5_sel_4,
+                tobit_5_sel_5),
+       digits = 5,
+       fontsize = 'small', # So table fits on page.
+       file = out_file_name,
+       label = 'tab:tobit_5_sel',
+       caption = "Selection Models for Fly Reel Prices")
+
+# First of all, this confirms that machined reels
 # are more valuable, with a coefficient of 0.76, instead of 0.63,
 # as was found in the separate linear regression model.
 # It also justifies the fact that only machined reels
