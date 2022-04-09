@@ -175,6 +175,72 @@ using Tobit models for sample selection.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagebreak
+\subsection{Comparison by Country of Manufacture}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Table \ref{tab:reg_by_country} shows the results of 
+a series of regression models 
+on different samples by country of manufacture.
+Model 1 shows the results 
+for the full model
+using the sample of fly reels made in the USA
+and Model 3 shows the remaining fly reels made in China or Korea.
+Models 2 and 4 show the estimates from a reduced model
+on each sample, eliminating the variable \texttt{Width}, 
+which was not significant in either of these smaller samples.
+
+\input{../Tables/reg_by_country}
+
+The width of the reel is insignificant in both samples
+and the coefficients are qualitatively similar across the samples, as well as matching in significance. 
+This suggests that one model might be sufficient. 
+
+%To test this statistically, I conduct an $F$-test. 
+%This compares a single model with only an
+%indicator for the country of manufacture
+%(the restricted model)
+%with a separate model for each country.
+%In this case, the full, unrestricted model has 
+%$K = 2\times6 = 12$ parameters, one for each variable in two models. 
+%The test that all of the coefficients are the same has 
+%$M = 6 - 1 = 5$
+%restrictions. 
+%The one restriction fewer accounts for the made-in-USA indicator
+%in the full model, 
+%which allows for two separate intercepts. 
+%% 
+%The $F$-statistic has a value of 
+%
+%$$ 
+%\frac{(RSS_M - RSS)/M}{RSS/(N - K - 1)} = \frac{(26.24962 - 25.2235)/5}{25.2235/235} = 1.912007. 
+%$$
+%
+%This value is greater than 1, so we can compare it to the critical value
+%of the $F$-statistic at the specified degrees of freedom for
+%a conventional level of significance.
+%These critical values are 
+%3.095, 2.252, and 1.872
+%at the 1\%, 5\%, and 10\%
+%levels of significance, respectively.
+%
+%This places the F-statistic between the critical values for the
+%5 and 10 percent levels of significance.
+%Conclude that fly reel prices may have some difference by
+%country of manufacture but the difference is marginal.
+%This suggests little justification for separate models by
+%country of manufacture.
+%We can investigate small differences between the models.
+%% 
+%Next, we will turn this model around
+%to determine whether features of the fly reels
+%are useful to predict country of manufacture. 
+%This will help determine whether manufacturers tend to 
+%jointly choose fly reel designs and country of manufacture. 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Sample Selection}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -185,7 +251,7 @@ using Tobit models for sample selection.
 
 
 The specification in 
-Table \ref{tab:reg_sq_horse}
+Table \ref{tab:reg_sealed_USA}
 assumes a linear functional form for
 the relationship between characteristics and prices of fly reels, 
 without selecting into samples by brand.
@@ -196,6 +262,26 @@ whether or not
 a manufacturer decides to manufacture fly reels in 
 America or overseas
 with the characteristics observed in the dataset. 
+
+\input{../Tables/reg_probit}
+
+Table \ref{tab:reg_probit} 
+shows the estimates for a probit model to predict the selection
+into samples by country of manufacture.
+% 
+Model 1 in Table \ref{tab:reg_probit} 
+shows a preliminary probit model to predict the selection indicator,
+with all the other explanatory variables in the model.
+American fly reel manufacture seems only to be related to 
+whether or not the reels are sealed.
+% 
+Model 2 shows the result of a variable-reduction exercise
+to eliminate variables that are not statistically significant.
+These estimates provide a concise but useful model to
+indicate the fly reel designs that manufacturers would 
+prefer to manufacture on American soil.
+This model is used to specify the selection equation
+of the sample selection estimates discussed next. 
 
 
 % \clearpage

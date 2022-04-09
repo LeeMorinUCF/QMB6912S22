@@ -251,7 +251,7 @@ texreg(l = list(lm_model_7,
 
 
 ##################################################
-# Create Dependnent Variables for
+# Create Dependent Variables for
 # Sample selection Models
 ##################################################
 
