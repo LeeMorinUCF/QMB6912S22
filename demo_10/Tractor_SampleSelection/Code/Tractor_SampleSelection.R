@@ -114,15 +114,58 @@ lm_model_7 <- lm(data = tractor_sales,
 print(summary(lm_model_7))
 
 
+
+
+
+##################################################
+# Expand the size of the dataset
+# to simplify estimation of sample selection model
+##################################################
+
+# A sample selection model requires a larger sample
+# than a simple linear regression model.
+# To avoid numerical difficulties with the estimation,
+# I will increase the sample to illustrate the
+# estimation technique.
+
+tractor_sales_2 <- rbind(tractor_sales,
+                         tractor_sales,
+                         tractor_sales,
+                         tractor_sales)
+
+# Estimate a regression model.
+lm_model_7_2 <- lm(data = tractor_sales_2,
+                   formula = log_saleprice ~
+                      horsepower + squared_horsepower +
+                      age +
+                      enghours +
+                      diesel + fwd + manual + johndeere + cab)
+
+# Output the results to screen.
+print(summary(lm_model_7_2))
+
+# Compare to the estimates from the original sample.
+print(summary(lm_model_7))
+
+
+
 # Print the output to a LaTeX file.
 tab_file_name <- 'reg_sq_horse.tex'
 out_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-texreg(l = list(lm_model_7),
+texreg(l = list(lm_model_7,
+                lm_model_7_2),
        digits = 5,
        file = out_file_name,
        label = 'tab:reg_sq_horse',
        caption = "Quadratic Model for Tractor Prices")
 
+
+# Overwrite original dataset with the new copy
+# after making a copy.
+tractor_sales_orig <- tractor_sales
+tractor_sales <- tractor_sales_2
+# Can replace original with the following.
+# tractor_sales <- tractor_sales_orig
 
 
 ##################################################
@@ -340,7 +383,7 @@ tobit_5_sel_1 <-
                                manual +
                                cab),
              iterlim = 20,
-             method = '2step',
+             # method = '2step',
              data = tractor_sales)
 # Note that this printed some warning messages:
 # Warning messages:
@@ -408,7 +451,7 @@ tobit_5_sel_2 <-
                                # manual +
                                cab),
              iterlim = 20,
-             method = '2step',
+             # method = '2step',
              data = tractor_sales)
 
 summary(tobit_5_sel_2)
@@ -465,7 +508,7 @@ tobit_5_sel_3 <-
                                # cab
                             ),
              iterlim = 20,
-             method = '2step',
+             # method = '2step',
              data = tractor_sales)
 
 summary(tobit_5_sel_3)
@@ -497,7 +540,7 @@ summary(tobit_5_sel_3$lm2)
 tobit_5_sel_4 <-
    selection(selection = johndeere ~
                 # diesel +
-                manual +
+                manual # +
                 # cab
              ,
              outcome = list(log_price_other ~
