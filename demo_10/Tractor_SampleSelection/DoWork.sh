@@ -35,7 +35,7 @@ echo ""
 echo "Analyzing the data in R..."
 echo ""
 
-Rscript Code/Tractor_SampleSelection.R > Code/Tractor_SampleSelection.out
+Rscript Code/Tractor_Sample_Selection.R > Code/Tractor_Sample_Selection.out
 
 echo "#-------------------------------------------------"
 echo ""
@@ -57,10 +57,10 @@ echo ""
 cd Paper
 
 # We need options for extra permission in the VirtualBox machine.
-pdflatex -shell-escape Tractor_SampleSelection.tex
+pdflatex -shell-escape Tractor_Sample_Selection.tex
 
 # Run the command twice to obtain references in document.
-pdflatex -shell-escape Tractor_SampleSelection.tex
+pdflatex -shell-escape Tractor_Sample_Selection.tex
 
 echo ""
 

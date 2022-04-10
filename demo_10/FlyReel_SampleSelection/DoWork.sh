@@ -35,7 +35,7 @@ echo ""
 echo "Analyzing the data in R..."
 echo ""
 
-Rscript Code/FlyReel_SampleSelection.R > Code/FlyReel_SampleSelection.out
+Rscript Code/FlyReel_Sample_Selection.R > Code/FlyReel_Sample_Selection.out
 
 echo "#-------------------------------------------------"
 echo ""
@@ -57,10 +57,10 @@ echo ""
 cd Paper
 
 # We need options for extra permission in the VirtualBox machine.
-pdflatex -shell-escape FlyReel_SampleSelection.tex
+pdflatex -shell-escape FlyReel_Sample_Selection.tex
 
 # Run the command twice to obtain references in document.
-pdflatex -shell-escape FlyReel_SampleSelection.tex
+pdflatex -shell-escape FlyReel_Sample_Selection.tex
 
 echo ""
 
