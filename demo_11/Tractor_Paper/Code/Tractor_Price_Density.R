@@ -78,10 +78,10 @@ print('Plotting relative histograms of saleprice.')
 ##################################################
 
 # First plot a histogram with the default options.
-fig_file_name <- 'hist_saleprice.eps'
+fig_file_name <- 'hist_saleprice.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+
+pdf(out_file_name)
 hist(tractor_sales[, 'saleprice'],
      main = 'Relative Histogram of Tractor Prices',
      xlab = 'Price',
@@ -94,10 +94,10 @@ dev.off()
 tractor_sales[, 'log_saleprice'] <- log(tractor_sales[, 'saleprice'])
 
 # Now plot the histogram for log of saleprice:
-fig_file_name <- 'hist_log_saleprice.eps'
+fig_file_name <- 'hist_log_saleprice.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+
+pdf(out_file_name)
 hist(tractor_sales[, 'log_saleprice'],
      main = 'Histogram of the Logarithm of Tractor Prices',
      xlab = 'Logarithm of Price',
@@ -110,10 +110,10 @@ dev.off()
 
 # A low number of breaks may give a smoother plot but
 # it may not be very informative.
-fig_file_name <- 'hist_log_saleprice_br5.eps'
+fig_file_name <- 'hist_log_saleprice_br5.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+
+pdf(out_file_name)
 hist(tractor_sales[, 'log_saleprice'], breaks = 5,
      main = c('Histogram of the Logarithm of Tractor Prices',
               'Number of Breaks: 5'),
@@ -124,10 +124,10 @@ dev.off()
 # On the other extreme,
 # a high number of breaks gives a sparsely populated
 # and jagged plot.
-fig_file_name <- 'hist_log_saleprice_br50.eps'
+fig_file_name <- 'hist_log_saleprice_br50.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+
+pdf(out_file_name)
 hist(tractor_sales[, 'log_saleprice'], breaks = 50,
      main = c('Histogram of the Logarithm of Tractor Prices',
               'Number of Breaks: 50'),
@@ -152,10 +152,10 @@ print('Plotting kernel-smoothed densities of saleprice.')
 price_density <- density(tractor_sales[, 'saleprice'])
 
 
-fig_file_name <- 'density_saleprice.eps'
+fig_file_name <- 'density_saleprice.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+
+pdf(out_file_name)
 plot(price_density,
      main = 'Kernel-Smoothed Density of Tractor Prices',
      xlab = 'Price')
@@ -171,10 +171,10 @@ price_density <- density(tractor_sales[, 'saleprice'],
                          bw = 10000)
 
 
-fig_file_name <- 'density_saleprice_bw10000.eps'
+fig_file_name <- 'density_saleprice_bw10000.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+
+pdf(out_file_name)
 plot(price_density,
      main = c('Kernel-Smoothed Density of Tractor Prices',
               'Bandwidth: 10,000'),
@@ -190,10 +190,10 @@ price_density <- density(tractor_sales[, 'saleprice'],
                          bw = 1000)
 
 
-fig_file_name <- 'density_saleprice_bw1000.eps'
+fig_file_name <- 'density_saleprice_bw1000.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+
+pdf(out_file_name)
 plot(price_density,
      main = c('Kernel-Smoothed Density of Tractor Prices',
               'Bandwidth: 1,000'),
@@ -214,10 +214,10 @@ log_price_density <- density(tractor_sales[, 'log_saleprice'],
                          bw = 0.20)
 
 
-fig_file_name <- 'density_log_saleprice_bw020.eps'
+fig_file_name <- 'density_log_saleprice_bw020.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+
+pdf(out_file_name)
 plot(log_price_density,
      main = c('Density of the Logarithm of Tractor Prices',
               'Bandwidth: 0.20'),

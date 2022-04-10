@@ -1,92 +1,92 @@
-\documentclass[11pt]{paper}
-\usepackage{palatino}
-\usepackage{amsfonts,amsmath,amssymb}
-% \usepackage{graphicx}
-
-\usepackage{listings}
-\usepackage{textcomp}
-\usepackage{color}
-
-\definecolor{dkgreen}{rgb}{0,0.6,0}
-\definecolor{gray}{rgb}{0.5,0.5,0.5}
-\definecolor{mauve}{rgb}{0.58,0,0.82}
-
-\lstset{frame=tb,
-  language=R,
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=false,
-  columns=flexible,
-  basicstyle={\small\ttfamily},
-  numbers=none,
-  numberstyle=\tiny\color{gray},
-  keywordstyle=\color{blue},
-  commentstyle=\color{dkgreen},
-  stringstyle=\color{mauve},
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=3
-}
-
-
-
-\ifx\pdftexversion\undefined
-    \usepackage[dvips]{graphicx}
-\else
-    \usepackage[pdftex]{graphicx}
-    \usepackage{epstopdf}
-    \epstopdfsetup{suffix=}
-\fi
-
-\usepackage{subfig}
-
-\begin{document}
+%\documentclass[11pt]{paper}
+%\usepackage{palatino}
+%\usepackage{amsfonts,amsmath,amssymb}
+%% \usepackage{graphicx}
+%
+%\usepackage{listings}
+%\usepackage{textcomp}
+%\usepackage{color}
+%
+%\definecolor{dkgreen}{rgb}{0,0.6,0}
+%\definecolor{gray}{rgb}{0.5,0.5,0.5}
+%\definecolor{mauve}{rgb}{0.58,0,0.82}
+%
+%\lstset{frame=tb,
+%  language=R,
+%  aboveskip=3mm,
+%  belowskip=3mm,
+%  showstringspaces=false,
+%  columns=flexible,
+%  basicstyle={\small\ttfamily},
+%  numbers=none,
+%  numberstyle=\tiny\color{gray},
+%  keywordstyle=\color{blue},
+%  commentstyle=\color{dkgreen},
+%  stringstyle=\color{mauve},
+%  breaklines=true,
+%  breakatwhitespace=true,
+%  tabsize=3
+%}
+%
+%
+%
+%\ifx\pdftexversion\undefined
+%    \usepackage[dvips]{graphicx}
+%\else
+%    \usepackage[pdftex]{graphicx}
+%    \usepackage{epstopdf}
+%    \epstopdfsetup{suffix=}
+%\fi
+%
+%\usepackage{subfig}
+%
+%\begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Problem Set 7
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\pagestyle{empty}
-{\noindent\bf Spring 2021 \hfill Firstname M.~Lastname}
-\vskip 16pt
-\centerline{\bf University of Central Florida}
-\centerline{\bf College of Business}
-\vskip 16pt
-\centerline{\bf QMB 6911}
-\centerline{\bf Capstone Project in Business Analytics}
-\vskip 10pt
-\centerline{\bf Solutions:  Problem Set \#7}
-\vskip 32pt
-\noindent
+%\pagestyle{empty}
+%{\noindent\bf Spring 2021 \hfill Firstname M.~Lastname}
+%\vskip 16pt
+%\centerline{\bf University of Central Florida}
+%\centerline{\bf College of Business}
+%\vskip 16pt
+%\centerline{\bf QMB 6911}
+%\centerline{\bf Capstone Project in Business Analytics}
+%\vskip 10pt
+%\centerline{\bf Solutions:  Problem Set \#7}
+%\vskip 32pt
+%\noindent
 
-\section{Data Description}
-
-This analysis follows the script \texttt{Tractor\_Reg\_Model.R} to produce a more accurate model for used tractor prices with the data from \texttt{TRACTOR7.csv} in the \texttt{Data} folder. 
-The dataset includes the following variables.
-\begin{table}[h!]
-\begin{tabular}{l l l}
-
-$saleprice_i$ & = & the price paid for tractor $i$ in dollars \\
-% 
-$horsepower_i$ & = & the horsepower of tractor $i$ \\
-$age_i$ & = & the number of years since tractor $i$ was manufactured  \\
-$enghours_i$ & = & the number of hours of use recorded for tractor $i$  \\
-$diesel_i$ & = & an indicator of whether tractor $i$ runs on diesel fuel \\ %, $0$ otherwise \\
-$fwd_i$ & = & an indicator of whether tractor $i$ has four-wheel drive \\ %, $0$ otherwise \\
-$manual_i$ & = & an indicator of whether tractor $i$ has a manual transmission \\ %, $0$ otherwise \\
-$johndeere_i$ & = & an indicator of whether tractor $i$ is manufactured by John Deere \\ %, $0$ otherwise \\
-$cab_i$ & = & an indicator of whether tractor $i$ has an enclosed cab \\ %, $0$ otherwise \\
-% 
-$spring_i$ & = & an indicator of whether tractor $i$ was sold in April or May \\ %, $0$ otherwise \\
-$summer_i$ & = & an indicator of whether tractor $i$ was sold between June and September \\ %, $0$ otherwise \\
-$winter_i$ & = & an indicator of whether tractor $i$ was sold between December and March \\ %, $0$ otherwise \\
-
-\end{tabular}
-\end{table}
+%\section{Data Description}
 %
-
-I will first estimate a model with our choices of functional form, and then consider exclusions of insignificant variables from the full model. 
-This approach allows for inclusion of possibly irrelevant variables and avoids excluding any relevant variables. 
+%This analysis follows the script \texttt{Tractor\_Reg\_Model.R} to produce a more accurate model for used tractor prices with the data from \texttt{TRACTOR7.csv} in the \texttt{Data} folder. 
+%The dataset includes the following variables.
+%\begin{table}[h!]
+%\begin{tabular}{l l l}
+%
+%$saleprice_i$ & = & the price paid for tractor $i$ in dollars \\
+%% 
+%$horsepower_i$ & = & the horsepower of tractor $i$ \\
+%$age_i$ & = & the number of years since tractor $i$ was manufactured  \\
+%$enghours_i$ & = & the number of hours of use recorded for tractor $i$  \\
+%$diesel_i$ & = & an indicator of whether tractor $i$ runs on diesel fuel \\ %, $0$ otherwise \\
+%$fwd_i$ & = & an indicator of whether tractor $i$ has four-wheel drive \\ %, $0$ otherwise \\
+%$manual_i$ & = & an indicator of whether tractor $i$ has a manual transmission \\ %, $0$ otherwise \\
+%$johndeere_i$ & = & an indicator of whether tractor $i$ is manufactured by John Deere \\ %, $0$ otherwise \\
+%$cab_i$ & = & an indicator of whether tractor $i$ has an enclosed cab \\ %, $0$ otherwise \\
+%% 
+%$spring_i$ & = & an indicator of whether tractor $i$ was sold in April or May \\ %, $0$ otherwise \\
+%$summer_i$ & = & an indicator of whether tractor $i$ was sold between June and September \\ %, $0$ otherwise \\
+%$winter_i$ & = & an indicator of whether tractor $i$ was sold between December and March \\ %, $0$ otherwise \\
+%
+%\end{tabular}
+%\end{table}
+%%
+%
+%I will first estimate a model with our choices of functional form, and then consider exclusions of insignificant variables from the full model. 
+%This approach allows for inclusion of possibly irrelevant variables and avoids excluding any relevant variables. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -94,8 +94,14 @@ This approach allows for inclusion of possibly irrelevant variables and avoids e
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\pagebreak
+I will first estimate a model with our choices of functional form, and then consider exclusions of insignificant variables from the full model. 
+This approach allows for inclusion of possibly irrelevant variables and avoids excluding any relevant variables. 
+
+
+% \pagebreak
 \section{Choosing the Dependent Variable}
+
+
 
 \subsection{Univariate Analysis}
 
@@ -367,5 +373,5 @@ and conclude that the John Deere indicator
 should be the only brand difference left in the model. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\end{document}
+% \end{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
