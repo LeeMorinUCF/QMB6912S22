@@ -160,14 +160,6 @@ texreg(l = list(lm_model_7,
        caption = "Quadratic Model for Tractor Prices")
 
 
-# Overwrite original dataset with the new copy
-# after making a copy.
-tractor_sales_orig <- tractor_sales
-tractor_sales <- tractor_sales_2
-# Can replace original with the following.
-# tractor_sales <- tractor_sales_orig
-
-
 ##################################################
 # Separate Linear Regression Models
 # by Brand Name: John Deere vs Others
@@ -412,7 +404,7 @@ summary(tobit_5_sel_2$lm2)
 
 
 
-# Instead of starting with a "bottom up" approach,
+# Instead of starting with a "big-to-small" approach,
 # reconsider the best models for each tractor separately.
 
 #--------------------------------------------------
@@ -451,7 +443,7 @@ tobit_5_sel_2 <-
                                # manual +
                                cab),
              iterlim = 20,
-             # method = '2step',
+             method = '2step',
              data = tractor_sales)
 
 summary(tobit_5_sel_2)
@@ -508,7 +500,7 @@ tobit_5_sel_3 <-
                                # cab
                             ),
              iterlim = 20,
-             # method = '2step',
+             method = '2step',
              data = tractor_sales)
 
 summary(tobit_5_sel_3)
