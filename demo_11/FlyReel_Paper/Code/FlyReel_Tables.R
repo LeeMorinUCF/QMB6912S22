@@ -198,7 +198,8 @@ tab_file_name <- sprintf('design_by_brand.tex')
 tab_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
 # cat(print(out_xtable), file = tab_file_name, append = FALSE)
 sink(file = tab_file_name, append = FALSE)
-print(out_xtable)
+# print(out_xtable)
+out_xtable
 sink()
 
 
