@@ -113,8 +113,10 @@ out_xtable <- xtable(out_tab[, ],
 
 tab_file_name <- sprintf('summ_by_country.tex')
 tab_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-cat(print(out_xtable), file = tab_file_name, append = FALSE)
-
+# cat(print(out_xtable), file = tab_file_name, append = FALSE)
+sink(file = tab_file_name, append = FALSE)
+print(out_xtable)
+sink()
 
 
 
@@ -171,7 +173,10 @@ out_xtable <- xtable(out_tab[, c(2, 3, 4, 1)],
 
 tab_file_name <- sprintf('country_by_brand.tex')
 tab_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-cat(print(out_xtable), file = tab_file_name, append = FALSE)
+# cat(print(out_xtable), file = tab_file_name, append = FALSE)
+sink(file = tab_file_name, append = FALSE)
+print(out_xtable)
+sink()
 
 
 #--------------------------------------------------
@@ -187,7 +192,10 @@ out_xtable <- xtable(out_tab[, c(5:8, 1)],
 
 tab_file_name <- sprintf('design_by_brand.tex')
 tab_file_name <- sprintf('%s/%s', tab_dir, tab_file_name)
-cat(print(out_xtable), file = tab_file_name, append = FALSE)
+# cat(print(out_xtable), file = tab_file_name, append = FALSE)
+sink(file = tab_file_name, append = FALSE)
+print(out_xtable)
+sink()
 
 
 

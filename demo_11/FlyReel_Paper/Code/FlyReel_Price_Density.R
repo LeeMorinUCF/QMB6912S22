@@ -83,10 +83,10 @@ print('Plotting ECDF.')
 ##################################################
 
 ecdf_price <- ecdf(flyreels[, 'Price'])
-fig_file_name <- 'ecdf_prices.eps'
+fig_file_name <- 'ecdf_prices.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+
+pdf(out_file_name)
 plot(ecdf_price,
      main = 'Empirical Cumulative Distribution Function of Fly Reel Prices',
      xlab = 'Price',
@@ -99,10 +99,10 @@ dev.off()
 print('Plotting relative histogram of price.')
 ##################################################
 
-fig_file_name <- 'hist_prices.eps'
+fig_file_name <- 'hist_prices.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+
+pdf(out_file_name)
 hist(flyreels[, 'Price'],
      main = 'Relative Histogram of Fly Reel Prices',
      xlab = 'Price',
@@ -117,10 +117,10 @@ print('of the natural logarithm of price.')
 ##################################################
 
 density_log_price <- density(log(flyreels[, 'Price']))
-fig_file_name <- 'density_prices.eps'
+fig_file_name <- 'density_prices.pdf'
 out_file_name <- sprintf('%s/%s', fig_dir, fig_file_name)
-setEPS()
-postscript(out_file_name)
+
+pdf(out_file_name)
 plot(density_log_price,
      main = 'Kernel-smoothed pdf of the Natural Log. of Fly Reel Prices',
      xlab = 'Price')

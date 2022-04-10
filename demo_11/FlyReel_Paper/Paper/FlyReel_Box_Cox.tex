@@ -1,63 +1,63 @@
-\documentclass[11pt]{book}
-\usepackage{palatino}
-\usepackage{amsfonts,amsmath,amssymb}
-% \usepackage{graphicx}
-
-\usepackage{listings}
-\usepackage{textcomp}
-\usepackage{color}
-
-\definecolor{dkgreen}{rgb}{0,0.6,0}
-\definecolor{gray}{rgb}{0.5,0.5,0.5}
-\definecolor{mauve}{rgb}{0.58,0,0.82}
-
-\lstset{frame=tb,
-  language=R,
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=false,
-  columns=flexible,
-  basicstyle={\small\ttfamily},
-  numbers=none,
-  numberstyle=\tiny\color{gray},
-  keywordstyle=\color{blue},
-  commentstyle=\color{dkgreen},
-  stringstyle=\color{mauve},
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=3
-}
-
-
-
-\ifx\pdftexversion\undefined
-    \usepackage[dvips]{graphicx}
-\else
-    \usepackage[pdftex]{graphicx}
-    \usepackage{epstopdf}
-    \epstopdfsetup{suffix=}
-\fi
-
-\usepackage{subfig}
-
-\begin{document}
+%\documentclass[11pt]{book}
+%\usepackage{palatino}
+%\usepackage{amsfonts,amsmath,amssymb}
+%% \usepackage{graphicx}
+%
+%\usepackage{listings}
+%\usepackage{textcomp}
+%\usepackage{color}
+%
+%\definecolor{dkgreen}{rgb}{0,0.6,0}
+%\definecolor{gray}{rgb}{0.5,0.5,0.5}
+%\definecolor{mauve}{rgb}{0.58,0,0.82}
+%
+%\lstset{frame=tb,
+%  language=R,
+%  aboveskip=3mm,
+%  belowskip=3mm,
+%  showstringspaces=false,
+%  columns=flexible,
+%  basicstyle={\small\ttfamily},
+%  numbers=none,
+%  numberstyle=\tiny\color{gray},
+%  keywordstyle=\color{blue},
+%  commentstyle=\color{dkgreen},
+%  stringstyle=\color{mauve},
+%  breaklines=true,
+%  breakatwhitespace=true,
+%  tabsize=3
+%}
+%
+%
+%
+%\ifx\pdftexversion\undefined
+%    \usepackage[dvips]{graphicx}
+%\else
+%    \usepackage[pdftex]{graphicx}
+%    \usepackage{epstopdf}
+%    \epstopdfsetup{suffix=}
+%\fi
+%
+%\usepackage{subfig}
+%
+%\begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Problem Set 6
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\pagestyle{empty}
-{\noindent\bf Spring 2021 \hfill Firstname M.~Lastname}
-\vskip 16pt
-\centerline{\bf University of Central Florida}
-\centerline{\bf College of Business}
-\vskip 16pt
-\centerline{\bf QMB 6911}
-\centerline{\bf Capstone Project in Business Analytics}
-\vskip 10pt
-\centerline{\bf Solutions:  Problem Set \#6}
-\vskip 32pt
-\noindent
+%\pagestyle{empty}
+%{\noindent\bf Spring 2021 \hfill Firstname M.~Lastname}
+%\vskip 16pt
+%\centerline{\bf University of Central Florida}
+%\centerline{\bf College of Business}
+%\vskip 16pt
+%\centerline{\bf QMB 6911}
+%\centerline{\bf Capstone Project in Business Analytics}
+%\vskip 10pt
+%\centerline{\bf Solutions:  Problem Set \#6}
+%\vskip 32pt
+%\noindent
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -65,8 +65,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\pagebreak
-\section*{Probability Density Function of Fly Reel Prices}
+% \pagebreak
+\section{Probability Density Function of Fly Reel Prices}
 
 Figure \ref{fig:density_prices} shows  the kernel-smoothed probability density function of fly reel prices.
 
@@ -92,7 +92,7 @@ price.
 
 
 \pagebreak
-\section*{Normality of the Original and Transformed Variables}
+\section{Normality of the Original and Transformed Variables}
 
 Figure \ref{fig:qq_prices} shows a pair of Q-Q plots, 
 comparing quantiles of the empirical distribution against
@@ -252,7 +252,7 @@ the accuracy of the statistical specification.
 
 \clearpage
 \section{\textsf{R} Packages for the Box-Cox Transformation}
-\subsection*{Using the \texttt{MASS} Package}
+\subsection{Using the \texttt{MASS} Package}
 
 As an illustration, we calculated
 the likelihood ourselves.
@@ -284,7 +284,7 @@ The output is plotted in Figure \ref{fig:plot_like_MASS}.
 
 
 \clearpage
-\section*{Using the \texttt{car} Package}
+\section{Using the \texttt{car} Package}
 
 The \texttt{car} package is another well-known option.
 With this function, the optimization produces 
@@ -306,7 +306,7 @@ The output is plotted in Figure \ref{fig:plot_like_car}.
 
 
 \clearpage
-\section*{Using the \texttt{EnvStats} Package}
+\section{Using the \texttt{EnvStats} Package}
 
 
 The \texttt{EnvStats} package is another option
@@ -346,7 +346,7 @@ The output is plotted in Figure \ref{fig:plot_like_EnvStats}.
 
 
 \clearpage
-\section*{Normality of the Transformed Variable}
+\section{Normality of the Transformed Variable}
 
 Now compare the quantiles of the distribution of the transformed variable with 
 the original. 
@@ -391,5 +391,5 @@ added complexity is warranted when other variables are added to the model.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\end{document}
+% \end{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
