@@ -411,7 +411,7 @@ lines(xo_grid,
 ##################################################
 
 # Next, we estimate a correctly specified
-# Tobit-2 model with exclusion restriction.
+# Tobit-2 model without the exclusion restriction.
 # This time we provide more variation
 # in the latent selection equation.
 
